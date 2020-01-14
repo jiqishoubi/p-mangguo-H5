@@ -1,0 +1,6 @@
+{
+  "navigationBarTitleText": "录制视频",
+  "usingComponents": {
+    "step": "/components/step"
+  }
+}

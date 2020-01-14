@@ -1,0 +1,111 @@
+{
+	"pages": [ //pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
+		{
+			"path": "pages/wode/wode_index/wode_index",
+			"style": {
+				"navigationStyle": "custom"
+			}
+		},
+		{
+			"path": "pages/login/login",
+			"style": {
+				"navigationStyle": "custom"
+			}
+		},
+		// 实名认证
+		{
+			"path": "pages/individual/pspcard/pspcard",
+			"style": {
+				"navigationBarTitleText": "个体工商注册"
+			}
+		},
+		{
+			"path": "pages/individual/video/video",
+			"style": {
+				"navigationBarTitleText": "录制视频"
+			}
+		},
+		{
+			"path": "pages/individual/videoresult/videoresult",
+			"style": {
+				"navigationBarTitleText": "录制视频"
+			}
+		},
+		{
+			"path": "pages/individual/signature/signature",
+			"style": {
+				"navigationBarTitleText": "手写签名"
+			}
+		},
+		{
+			"path": "pages/individual/result/result",
+			"style": {
+				"navigationBarTitleText": "个体工商注册"
+			}
+		},
+		// 签约信息
+		{
+			"path": "pages/sign/signlist/signlist",
+			"style": {
+				"navigationBarTitleText": "签约信息"
+			}
+		},
+		{
+			"path": "pages/sign/signpddf/signpddf",
+			"style": {
+				"navigationBarTitleText": "签约信息"
+			}
+		},
+		// // 银行卡
+		// {
+		// 	"path": "pages/bankcard/bankcard/bankcard",
+		// 	"style": {
+		// 		"navigationBarTitleText": "我的银行卡"
+		// 	}
+		// },
+		// {
+		// 	"path": "pages/bankcard/addbankcard/addbankcard",
+		// 	"style": {
+		// 		"navigationBarTitleText": "添加银行卡"
+		// 	}
+		// },
+		// 酬金
+		{
+			"path": "pages/reward/reward_index/reward_index",
+			"style": {
+				"navigationBarTitleText": "酬金记录"
+			}
+		},
+		{
+			"path": "pages/reward/reward_list/reward_list",
+			"style": {
+				"navigationBarTitleText": "酬金记录"
+			}
+		},
+		{
+			"path": "pages/reward/reward_detail/reward_detail",
+			"style": {
+				"navigationBarTitleText": "酬金明细"
+			}
+		}
+		// // 任务
+		// {
+		// 	"path": "pages/task/task_list/task_list",
+		// 	"style": {
+		// 		"navigationBarTitleText": "任务"
+		// 	}
+		// },
+		// {
+		// 	"path": "pages/task/task_detail/task_detail",
+		// 	"style": {
+		// 		"navigationBarTitleText": "查看任务"
+		// 	}
+		// }
+	],
+	"globalStyle": {
+		"navigationBarTextStyle": "black",
+		"navigationBarTitleText": "便利电科技",
+		"navigationBarBackgroundColor": "#fff",
+		"backgroundColor": "#F8F8F8"
+	}
+}

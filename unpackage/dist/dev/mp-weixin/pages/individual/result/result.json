@@ -1,0 +1,6 @@
+{
+  "navigationBarTitleText": "个体工商注册",
+  "usingComponents": {
+    "step": "/components/step"
+  }
+}

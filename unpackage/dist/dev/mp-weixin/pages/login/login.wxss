@@ -1,0 +1,142 @@
+.w100 {
+  width: 100%;
+}
+.h100 {
+  height: 100%;
+}
+.wh100 {
+  width: 100%;
+  height: 100%;
+}
+.flex {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: flex;
+}
+.flexCenter {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+          align-items: center;
+}
+.flexBetween {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-box-pack: justify;
+  -webkit-justify-content: space-between;
+          justify-content: space-between;
+}
+.flexJCenter {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+          justify-content: center;
+}
+.flexAround {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-justify-content: space-around;
+          justify-content: space-around;
+}
+.flexEvenly {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-box-pack: space-evenly;
+  -webkit-justify-content: space-evenly;
+          justify-content: space-evenly;
+}
+.flex1 {
+  -webkit-box-flex: 1;
+  -webkit-flex: 1 0 0;
+          flex: 1 0 0;
+  width: 0;
+}
+.flexColumn {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+          align-items: center;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  -webkit-flex-direction: column;
+          flex-direction: column;
+}
+.positionCenter {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  -webkit-transform: translate(-50%, -50%);
+          transform: translate(-50%, -50%);
+}
+.colornone {
+  color: transparent;
+}
+.top {
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+          align-items: center;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  -webkit-flex-direction: column;
+          flex-direction: column;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+          justify-content: center;
+  height: 473rpx;
+  background-color: #4185f4;
+}
+.top .logo {
+  width: 181rpx;
+  height: 77rpx;
+  margin-bottom: 30rpx;
+}
+.top .logo_title {
+  color: #fff;
+}
+.form {
+  margin: 75rpx 73rpx;
+}
+.form .form_item {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+          align-items: center;
+  height: 80rpx;
+  margin-top: 20rpx;
+  border-bottom: 1rpx solid #dedede;
+}
+.form .form_item .form_item_icon {
+  width: 25rpx;
+  height: 34rpx;
+  margin-right: 24rpx;
+}
+.form .form_item .form_input {
+  -webkit-box-flex: 1;
+  -webkit-flex: 1 0 0;
+          flex: 1 0 0;
+  width: 0;
+}
+.btn {
+  margin: 0 73rpx;
+  background-color: #4185f4;
+  color: #ffffff;
+  font-size: 33rpx;
+}
+.btn_active {
+  background-color: #367ae8;
+}
+

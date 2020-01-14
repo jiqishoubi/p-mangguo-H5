@@ -1,0 +1,58 @@
+.w100 {
+	width: 100%;
+}
+.h100 {
+	height: 100%;
+}
+.wh100 {
+	.w100;
+	.h100;
+}
+.flex {
+	display: flex;
+}
+.flexCenter {
+	.flex;
+	align-items: center;
+}
+.flexBetween {
+	.flex;
+	justify-content: space-between;
+}
+.flexJCenter {
+	.flex;
+	justify-content: center;
+}
+.flexAround {
+	.flex;
+	justify-content: space-around;
+}
+.flexEvenly {
+	.flex;
+	justify-content: space-evenly;
+}
+.flex1 {
+	flex: 1 0 0;
+	width: 0;
+}
+.flexColumn {
+	.flex;
+	.flexCenter;
+	flex-direction: column;
+}
+.positionCenter {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+}
+.colornone {
+	color: transparent;
+}
+
+// *********************自定义*********************
+@primaryColor: #4185f4;
+@hoverColor: #3077eb;
+@hoverWhite:#e5e5e5;
+@lightColor: #91b8fa;
+@darkColor: #1352b9;

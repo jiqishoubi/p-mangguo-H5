@@ -1,0 +1,7 @@
+{
+  "navigationBarTitleText": "录制视频",
+  "usingComponents": {
+    "uni-popup": "/node-modules/@dcloudio/uni-ui/lib/uni-popup/uni-popup",
+    "step": "/components/step"
+  }
+}

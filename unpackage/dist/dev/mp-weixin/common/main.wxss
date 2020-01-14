@@ -1,0 +1,32 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*每个页面公共css */
+view,
+input {
+	font-size: 24rpx;
+}
+/* *********************样式修正********************* */
+
+
+.pspcard_tongyi_checkbox .wx-checkbox-input {
+	width: 32rpx !important;
+	height: 32rpx !important;
+}
+.pspcard_tongyi_checkbox .wx-checkbox-input.wx-checkbox-input-checked:before {
+	font-size: 32rpx;
+}
+
+
