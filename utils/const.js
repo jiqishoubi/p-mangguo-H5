@@ -3,6 +3,10 @@ export const host = {
 	prod: 'https://pay.bld365.com',
 }
 
+export const webProdHostArr=[
+	`//lexinh5.bld365.com/mangguo/index`
+]
+
 // export const host_baidu = 'http://49.4.15.72:7238'
 export const host_baidu = 'https://ocr.bld365.com'
 
