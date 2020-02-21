@@ -1,7 +1,0 @@
-{
-  "navigationStyle": "custom",
-  "usingComponents": {
-    "mp-complete-navbar-height": "/components/mp-completeNavbarHeight",
-    "getsmsbtn": "/components/getsmsbtn"
-  }
-}

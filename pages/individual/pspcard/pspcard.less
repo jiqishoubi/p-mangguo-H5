@@ -1,0 +1,129 @@
+@import '~utils/utils.less';
+
+.tips {
+	.flexCenter;
+	height: 85rpx;
+	padding: 0 29rpx;
+	color: @darkColor;
+	background-color: @lightColor;
+}
+
+.psp {
+	margin-bottom: 18rpx;
+	background-color: #fff;
+	// top
+	.top {
+		.flexCenter;
+		padding: 37rpx 36rpx;
+		margin-bottom: 24rpx;
+		.top_icon {
+			width: 82rpx;
+			height: 82rpx;
+			margin-right: 31rpx;
+		}
+		.top_content {
+			.flex1;
+			.title {
+				color: #000;
+				font-size: 28rpx;
+			}
+			.desc {
+				color: #4a4a4a;
+			}
+		}
+	}
+	// content
+	.content {
+		.flex;
+		.flexEvenly;
+		flex-wrap: wrap;
+		.psp_item {
+			.flexColumn;
+			.img_box {
+				width: 339rpx;
+				height: 242rpx;
+				position: relative;
+				background-color: #f1f1f1;
+				.img {
+					.positionCenter;
+					width: 236rpx;
+					height: 169rpx;
+				}
+				.photo {
+					.wh100;
+				}
+				.chongpai {
+					.flexCenter;
+					.flexJCenter;
+					width: 87rpx;
+					height: 42rpx;
+					border-radius: 21rpx;
+					background-color: @primaryColor;
+					color: #fff;
+					font-size: 19rpx;
+					position: absolute;
+					right: 16rpx;
+					bottom: 14rpx;
+				}
+			}
+			.title {
+				margin-top: 20rpx;
+				margin-bottom: 25rpx;
+				color: #4a4a4a;
+			}
+		}
+	}
+}
+
+// form
+.form {
+	background-color: #fff;
+	.form_item {
+		.flexCenter;
+		height: 85rpx;
+		border-bottom: 1rpx solid #d7d6d6;
+		padding: 0 24rpx 0 36rpx;
+		&:last-child {
+			border-bottom: none;
+		}
+		.input {
+			.flex1;
+			padding-left: 48rpx;
+		}
+		// 长期
+		.changqiBtn{
+			padding: 10rpx;
+			color: #929292;
+		}
+	}
+}
+
+// tongyi
+.tongyi {
+	.flex;
+	margin: 18rpx 36rpx;
+	.content {
+		.flex1;
+		color: #9b9b9b;
+		.hover {
+			color: @primaryColor;
+		}
+	}
+}
+
+.btn {
+	.flexCenter;
+	.flexJCenter;
+	height: 89rpx;
+	background-color: #cacacb;
+	font-size: 28rpx;
+	color: #fff;
+	position: fixed;
+	width: 100%;
+	left: 0;
+	bottom: 0;
+	z-index: 11;
+	&.active {
+		background-color: @primaryColor;
+	}
+}

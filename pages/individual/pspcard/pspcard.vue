@@ -1,13 +1,17 @@
 <template>
-	<view>
+	<view v-if="!loading_getUserInfo">
 		<step active="0"></step>
 
-		<view class="tips">信息仅用于身份验证，平台保障您的信息安全</view>
+		<view v-if="!haveRealname" class="tips">信息仅用于身份验证，平台保障您的信息安全</view>
 
 		<!-- 身份证 -->
 		<view class="psp">
 			<!-- title -->
-			<view class="top">
+			<view v-if="haveRealname" class="top">
+				<image class="top_icon" src="https://cdn.s.bld365.com/mangguopsp_haverealname_icon.png" mode="aspectFit"></image>
+				<view class="top_content"><view class="title">您已通过实名认证</view></view>
+			</view>
+			<view v-else class="top">
 				<image class="top_icon" src="https://cdn.s.bld365.com/mangguopsp_icon_01.png"></image>
 				<view class="top_content">
 					<view class="title">请上传身份证照片</view>
@@ -15,20 +19,13 @@
 				</view>
 			</view>
 
-			<!-- <view class="top">
-				<image class="top_icon" src="https://cdn.s.bld365.com/mangguopsp_haverealname_icon.png" mode="aspectFit"></image>
-				<view class="top_content">
-					<view class="title">您已通过实名认证</view>
-				</view>
-			</view> -->
-
 			<!-- content -->
 			<view class="content">
 				<view class="psp_item">
 					<view class="img_box" @tap="clickbox(0)">
 						<image v-if="!photo0" class="img" src="https://cdn.s.bld365.com/mangguopsp_bgimg_01.png"></image>
 						<image v-else class="photo" :src="photo0" mode="aspectFit"></image>
-						<view v-if="photo0" class="chongpai" @tap.stop="clickchongpai(0)">重拍</view>
+						<view v-if="photo0 && !haveRealname" class="chongpai" @tap.stop="clickchongpai(0)">重拍</view>
 					</view>
 					<view class="title">上传身份证信息面</view>
 				</view>
@@ -36,7 +33,7 @@
 					<view class="img_box" @tap="clickbox(1)">
 						<image v-if="!photo1" class="img" src="https://cdn.s.bld365.com/mangguopsp_bgimg_02.png"></image>
 						<image v-else class="photo" :src="photo1" mode="aspectFit"></image>
-						<view v-if="photo1" class="chongpai" @tap.stop="clickchongpai(1)">重拍</view>
+						<view v-if="photo1 && !haveRealname" class="chongpai" @tap.stop="clickchongpai(1)">重拍</view>
 					</view>
 					<view class="title">上传身份证国徽面</view>
 				</view>
@@ -44,7 +41,7 @@
 					<view class="img_box" @tap="clickbox(2)">
 						<image v-if="!photo2" class="img" src="https://cdn.s.bld365.com/mangguopsp_bgimg_03.png"></image>
 						<image v-else class="photo" :src="photo2" mode="aspectFit"></image>
-						<view v-if="photo2" class="chongpai" @tap.stop="clickchongpai(2)">重拍</view>
+						<view v-if="photo2 && !haveSign" class="chongpai" @tap.stop="clickchongpai(2)">重拍</view>
 					</view>
 					<view class="title">本人手持身份证</view>
 				</view>
@@ -52,7 +49,7 @@
 					<view class="img_box" @tap="clickbox(3)">
 						<image v-if="!photo3" class="img" src="https://cdn.s.bld365.com/mangguopsp_bgimg_04.png"></image>
 						<image v-else class="photo" :src="photo3" mode="aspectFit"></image>
-						<view v-if="photo3" class="chongpai" @tap.stop="clickchongpai(3)">重拍</view>
+						<view v-if="photo3 && !haveSign" class="chongpai" @tap.stop="clickchongpai(3)">重拍</view>
 					</view>
 					<view class="title">本人免冠照</view>
 				</view>
@@ -60,9 +57,13 @@
 					<view class="img_box" @tap="clickbox(4)">
 						<image v-if="!photo4" class="img" src="https://cdn.s.bld365.com/mangguopsp_bgimg_05.png"></image>
 						<image v-else class="photo" :src="photo4" mode="aspectFit"></image>
-						<view v-if="photo4" class="chongpai" @tap.stop="clickchongpai(4)">重拍</view>
+						<view v-if="photo4 && !haveSign" class="chongpai" @tap.stop="clickchongpai(4)">重拍</view>
 					</view>
 					<view class="title">个人征信报告</view>
+				</view>
+				<view class="psp_item">
+					<view class="img_box" style="background-color: transparent;"></view>
+					<view class="title"></view>
 				</view>
 			</view>
 		</view>
@@ -75,25 +76,30 @@
 					<text class="colornone">一一</text>
 					名
 				</view>
-				<input class="input" placeholder="姓名" v-model="pspname" />
+				<input class="input" placeholder="姓名" v-model="pspname" :disabled="haveRealname" />
 			</view>
 			<view class="form_item">
 				<view class="label">身份证号</view>
-				<input class="input" placeholder="身份证号" v-model="pspcard" />
+				<input class="input" placeholder="身份证号" v-model="pspcard" disabled />
 			</view>
-			<view class="form_item" @tap="openDate">
+			<view class="form_item">
+				<view class="label">签发日期</view>
+				<input class="input" placeholder="签发日期" v-model="pspdate1" disabled />
+			</view>
+			<view class="form_item">
 				<view class="label">失效日期</view>
-				<input class="input" placeholder="失效日期" v-model="pspdate" disabled />
+				<input class="input" placeholder="失效日期" v-model="pspdate2" disabled />
+				<!-- <view v-if="!haveSign" class="changqiBtn" @tap="clickChangqi">长期</view> -->
 			</view>
 			<view class="form_item">
 				<view class="label">银行卡号</view>
-				<input class="input" placeholder="请输入任意一张银行卡卡号" v-model="bankcard" />
+				<input class="input" placeholder="请输入任意一张银行卡卡号" v-model="bankcard" :disabled="haveSign" />
 			</view>
 			<view class="form_item">
 				<view class="label">手机号码</view>
-				<input class="input" placeholder="请输入手机号码" type="number" v-model="phone" />
+				<input class="input" placeholder="请输入手机号码" type="number" v-model="phone" maxlength="11" disabled />
 			</view>
-			<view class="form_item">
+			<view v-if="!haveRealname" class="form_item">
 				<view class="label">
 					验
 					<text class="colornone">a</text>
@@ -101,30 +107,37 @@
 					<text class="colornone">a</text>
 					码
 				</view>
-				<input class="input" placeholder="请输入验证码" type="number" v-model="smscode" />
-				<getsmsbtn limitSecond="60" allUrl="" phoneNumber="" styleStr="color:#4185f4;"></getsmsbtn>
+				<input class="input" placeholder="请输入验证码" type="number" v-model="smscode" maxlength="6" />
+				<getsmsbtn limitSecond="60" type="get" :allUrl="allUrl" :phoneNumber="phone" styleStr="color:#4185f4;" :validBeforeFlag="validBeforeFlag"></getsmsbtn>
 			</view>
 		</view>
 
 		<!-- 同意 -->
 		<view class="tongyi">
-			<checkbox class="pspcard_tongyi_checkbox" :checked="checkboxVal" color="#4185f4" />
+			<checkbox-group v-if="!haveSign" @change="checkboxChange"><checkbox class="pspcard_tongyi_checkbox" :checked="checkboxVal" color="#4185f4" /></checkbox-group>
 			<view class="content">
-				本人已阅读并同意
-				<text class="hover">《注册协议》</text>
-				<text class="hover">《某某三方协议》</text>
-				全部条款，知晓提交验证码即代表本人真是意愿签署
+				<text v-if="!haveSign">
+					本人已阅读并同意
+					<text class="hover" @tap="clickProtocol">《三方协议》</text>
+					全部条款，知晓提交验证码即代表本人真实意愿签署
+				</text>
+				<text v-else>
+					您已同意并签署
+					<text class="hover" @tap="clickProtocol">《三方协议》</text>
+					的条款
+				</text>
 			</view>
 		</view>
 
 		<view style="height: 200rpx;"></view>
 
 		<!-- btn -->
-		<view class="btn" :class="{ active: btnActive }" @tap="clickNext">下一步</view>
+		<view v-if="!haveSign" class="btn" :class="{ active: btnActive }" @tap="clickNext">下一步</view>
 
 		<!-- ****************模态**************** -->
-		<uni-calendar ref="calendar" :insert="false" :date="pspdate" @confirm="pspDateChange"></uni-calendar>
+		<uni-calendar ref="calendar" :insert="false" :date="showPspdate" @confirm="pspDateChange"></uni-calendar>
 	</view>
+	<view v-else></view>
 </template>
 
 <script>
@@ -134,10 +147,17 @@ import getsmsbtn from '@/components/getsmsbtn.vue';
 import { globalHost } from '@/utils/utils.js';
 import requestw from '@/utils/requestw.js';
 import allApiStr from '@/utils/allApiStr.js';
+import { mchCodeKey, companyCodeKey, userInfoKey, phoneNumberKey } from '@/utils/const.js';
+import { getUserInfoAjax } from './utils.js';
 
 export default {
 	data() {
 		return {
+			token: null,
+			userInfo: null,
+			//getsmsbtn
+			allUrl: globalHost() + allApiStr.getSmsPsp,
+
 			//photo
 			photo0: '',
 			photo1: '',
@@ -147,23 +167,69 @@ export default {
 			// form
 			pspname: '',
 			pspcard: '',
-			pspdate: '', //失效日期
+
+			pspdate1: '', //签发日期
+			pspdate2: '', //失效日期
+			showPspdate: '', //控件显示的日期
+			lookingDateIndex: '', //正在操作的date 1 2
 
 			bankcard: '',
 			phone: '',
 			smscode: '',
 
 			//tongyi
-			checkboxVal: true
+			checkboxVal: false,
+			protocolUrl: '', //协议
+
+			//loading
+			loading_getUserInfo: false
 		};
 	},
 	computed: {
-		btnActive() {
+		//发验证码之前的校验
+		validBeforeFlag() {
 			let flag = true;
-			if (!this.photo0 || !this.photo1 || !this.photo2 || !this.photo3 || !this.pspname || !this.pspcard || !this.pspdate) {
+			if (
+				this.photo0 == '' ||
+				this.photo1 == '' ||
+				this.photo2 == '' ||
+				this.photo3 == '' ||
+				this.photo4 == '' ||
+				this.pspname == '' ||
+				this.pspcard == '' ||
+				this.pspdate1 == '' ||
+				this.pspdate2 == '' ||
+				this.bankcard == ''
+			) {
 				flag = false;
 			}
 			return flag;
+		},
+		btnActive() {
+			if (!this.haveRealname) {
+				let flag = true;
+				if (!this.validBeforeFlag || this.phone == '' || this.smscode == '' || !this.checkboxVal) {
+					flag = false;
+				}
+				return flag;
+			} else {
+				return this.checkboxVal;
+			}
+		},
+		//是否实名
+		haveRealname() {
+			return this.userInfo && this.userInfo.userAuthInfo && this.userInfo.userAuthInfo.REAL_NAME;
+		},
+		//是否签约
+		haveSign() {
+			return (
+				this.userInfo &&
+				this.userInfo.userAuthInfo &&
+				this.userInfo.userAuthInfo.REAL_NAME &&
+				this.userInfo.userAttr &&
+				this.userInfo.userAttr.HOLD_PSPT_PHOTO &&
+				this.userInfo.userAttr.HAND_WRITE_SIGNATURE
+			);
 		}
 	},
 	components: {
@@ -174,7 +240,28 @@ export default {
 	/**
 	 * 周期
 	 */
-	onLoad() {},
+	async onLoad() {
+		// token
+		let userInfo = uni.getStorageSync(userInfoKey);
+		this.token = userInfo && userInfo.TOKEN ? userInfo.TOKEN : null;
+		this.phone = uni.getStorageSync(phoneNumberKey);
+
+		//ajax获取userInfo
+		uni.showLoading({ title: '请稍候...', mask: true });
+		this.loading_getUserInfo = true;
+		let res = await getUserInfoAjax(this.token);
+		this.loading_getUserInfo = false;
+		uni.hideLoading();
+		this.userInfo = res.value;
+		if (this.userInfo && this.userInfo.userAuthInfo && this.userInfo.userAuthInfo.REAL_NAME) {
+			this.realnameRender();
+		}
+
+		//协议信息
+		setTimeout(() => {
+			this.getProtocol();
+		}, 500);
+	},
 	onShow() {},
 	onReady() {},
 	onHide() {},
@@ -187,6 +274,94 @@ export default {
 	 * 方法
 	 */
 	methods: {
+		//**********************services******************************************************************************************************************************************************************
+		//获取协议
+		async getProtocol() {
+			let res = await requestw({
+				type: 'get',
+				url: this.haveSign ? allApiStr.getProtocolSignApi : allApiStr.getProtocolApi,
+				data: { companyCode: uni.getStorageSync(companyCodeKey) }
+			});
+			console.log(res);
+			if (res.data.resultCode == '200') {
+				//两个返回的格式不一样
+				if (this.haveSign) {
+					this.protocolUrl = res.data.value && res.data.value.signedProtocolUrl ? res.data.value.signedProtocolUrl : '';
+				} else {
+					this.protocolUrl = res.data.value;
+				}
+			}
+		},
+		//ocr身份证识别
+		ocrAjax(tempFilePath, file, index) {
+			const self = this;
+			this['photo' + index] = '';
+
+			let fieldType, ocrType;
+			if (index == 0) {
+				fieldType = 'PSPT_POSITIVE';
+				ocrType = 'ID_CARD_FRONT';
+			} else if (index == 1) {
+				fieldType = 'PSPT_NEGATIVE';
+				ocrType = 'ID_CARD_BACK';
+			} else {
+				fieldType = 'other';
+				ocrType = 'other';
+			}
+			let postData = {
+				fileName: file.name,
+				fieldType,
+				ocrType
+			};
+			uni.showLoading({ title: '请稍候...', mask: true });
+			uni.uploadFile({
+				url: globalHost() + allApiStr.ocrApi,
+				filePath: tempFilePath,
+				name: 'file',
+				formData: postData,
+				success: res => {
+					uni.hideLoading();
+					let data;
+					try {
+						data = JSON.parse(res.data);
+					} catch (e) {
+						uni.showToast({ title: '识别失败，请稍后再试', icon: 'none', mask: true });
+						return;
+					}
+
+					if (index == 0 || index == 1) {
+						self.ocrCallback(index, data);
+					} else {
+						self.otherCallback(index, data);
+					}
+				}
+			});
+		},
+		//注册实名
+		realNameAjax() {
+			return new Promise(async resolve => {
+				let postData = {
+					mchCode: uni.getStorageSync(mchCodeKey), //   商户编码
+					psptPositive: this.photo0, // 正面
+					psptNegative: this.photo1, // 反面
+					holdPspt: this.photo2, //   手持
+					headless: this.photo3, //  免冠
+					creditReportPhoto: this.photo4, // 征信
+					psptName: this.pspname, //  姓名
+					psptNo: this.pspcard, //   身份证号
+					effectiveDate: this.pspdate1 + '--' + this.pspdate2, //  有效期
+					bankNo: this.bankcard, //   银行卡号
+					phone: this.phone, //   电话
+					smsCaptcha: this.smscode //  验证码
+				};
+				let res = await requestw({
+					url: allApiStr.realNameApi,
+					data: postData
+				});
+				resolve(res.data);
+			});
+		},
+		//**********************services end**************************************************************************************************************************
 		clickbox(index) {
 			if (this['photo' + index]) {
 				//放大查看
@@ -204,7 +379,6 @@ export default {
 				count: 1,
 				sizeType: ['compressed'],
 				success: res => {
-					console.log(res);
 					if (res.errMsg && res.errMsg.indexOf(':ok') > -1 && res.tempFilePaths && res.tempFilePaths[0]) {
 						let tempFilePath = res.tempFilePaths[0];
 						let file = res.tempFiles[0];
@@ -214,44 +388,7 @@ export default {
 				}
 			});
 		},
-		ocrAjax(tempFilePath, file, index) {
-			const self = this;
-			this['photo' + index] = '';
-			let postData = {
-				fileName: file.name,
-				fieldType: index == 0 ? 'PSPT_POSITIVE' : 'PSPT_NEGATIVE',
-				ocrType: index == 0 ? 'ID_CARD_FRONT' : 'ID_CARD_BACK'
-			};
-			uni.showLoading({
-				title: '请稍候...',
-				mask: true
-			});
-			uni.uploadFile({
-				url: globalHost() + allApiStr.ocrApi,
-				filePath: tempFilePath,
-				name: 'file',
-				formData: postData,
-				success: res => {
-					uni.hideLoading();
-					let data;
-					try {
-						data = JSON.parse(res.data);
-					} catch (e) {
-						console.log(e);
-						uni.showToast({
-							title: 'OCR识别失败，请稍后再试',
-							icon: 'none',
-							mask: true
-						});
-						return;
-					}
-
-					self.ocrCallback(index, data);
-				}
-			});
-		},
 		ocrCallback(index, res) {
-			console.log(res);
 			if (!res || res.resultCode !== '200' || !res.value || !res.value.OCR_DATA || (index == 0 ? !res.value.OCR_DATA['姓名'] : !res.value.OCR_DATA['失效日期'])) {
 				uni.showToast({
 					title: 'OCR识别失败' + res.systemMessage,
@@ -265,28 +402,99 @@ export default {
 				this.pspname = res.value.OCR_DATA['姓名'];
 				this.pspcard = res.value.OCR_DATA['公民身份号码'];
 			}
-			if (res.value.OCR_DATA['失效日期']) {
-				let str = res.value.OCR_DATA['失效日期'];
-				this.pspdate = str.substring(0, 4) + '-' + str.substring(4, 6) + '-' + str.substring(6, 8);
-				console.log(this.pspdate);
+			if (res.value.OCR_DATA['签发日期']) {
+				let dateStr1 = res.value.OCR_DATA['签发日期'];
+				let dateStr2 = res.value.OCR_DATA['失效日期'];
+
+				this.pspdate1 = dateStr1.substring(0, 4) + '-' + dateStr1.substring(4, 6) + '-' + dateStr1.substring(6, 8);
+				this.pspdate2 = dateStr2 == '长期' ? dateStr2 : dateStr2.substring(0, 4) + '-' + dateStr2.substring(4, 6) + '-' + dateStr2.substring(6, 8);
 			}
+			this['photo' + index] = res.value.FILE_URL;
+		},
+		otherCallback(index, res) {
+			if (res.resultCode !== '200') {
+				uni.showToast({ title: res.systemMessage ? res.systemMessage : '操作失败', icon: 'none', mask: true });
+				return;
+			}
+
+			uni.showToast({ title: '操作成功', icon: 'none' });
 			this['photo' + index] = res.value.FILE_URL;
 		},
 		clickchongpai(index) {
 			this.openChooseImage(index);
 		},
 		// 日期控件
-		openDate() {
+		openDate(index) {
+			if (this.haveSign) return;
+			this.lookingDateIndex = index;
+			this.showPspdate = this['pspdate' + index];
 			this.$refs.calendar.open();
 		},
 		pspDateChange(e) {
-			this.pspdate = e.fulldate;
+			this['pspdate' + this.lookingDateIndex] = e.fulldate;
+		},
+		//点击长期
+		clickChangqi() {
+			this.pspdate2 = '长期';
+		},
+		//点击查看协议
+		clickProtocol() {
+			if (!this.protocolUrl) {
+				uni.showToast({ title: '获取协议失败', icon: 'none', mask: true });
+				return;
+			}
+
+			uni.navigateTo({
+				url: `/pages/sign/signpddf/signpddf?pdfUrl=${this.protocolUrl}`
+			});
+		},
+		//checkbox
+		checkboxChange(e) {
+			this.checkboxVal = e.detail.value.length == 0 ? false : true;
 		},
 		//点击下一步
-		clickNext() {
-			uni.navigateTo({
-				url: '/pages/individual/video/video'
-			});
+		async clickNext() {
+			//验证
+			if (!this.btnActive) {
+				uni.showToast({ title: '信息请填写完整，并勾选同意协议', icon: 'none', mask: true });
+				return;
+			}
+
+			//实名认证
+			if (!this.haveRealname) {
+				uni.showLoading({ title: '请稍候...', mask: true });
+				let res = await this.realNameAjax();
+				if (res.resultCode !== '200') {
+					uni.showToast({ title: res.systemMessage ? res.systemMessage : '操作失败', icon: 'none', mask: true });
+					return;
+				}
+				uni.showToast({ title: '操作成功', icon: 'none', mask: true });
+			}
+			//实名认证 end
+
+			setTimeout(() => {
+				uni.navigateTo({
+					url: '/pages/individual/video/video'
+				});
+			}, 500);
+		},
+		//实名过了 渲染
+		realnameRender() {
+			//photo
+			this.photo0 = this.userInfo.userAuthInfo.PSPT_POSITIVE;
+			this.photo1 = this.userInfo.userAuthInfo.PSPT_NEGATIVE;
+			this.photo2 = this.userInfo.userAttr.HOLD_PSPT_PHOTO;
+			this.photo3 = this.userInfo.userAttr.AVATAR;
+			this.photo4 = this.userInfo.userAttr.CREDIT_REPORT_PHOTO;
+			// form
+			this.pspname = this.userInfo.userAuthInfo.REAL_NAME;
+			this.pspcard = this.userInfo.userAuthInfo.PSPT_NO;
+
+			let dateStr = this.userInfo.userAttr.EFFECTIVE_DATE;
+			this.pspdate1 = dateStr.split('--')[0];
+			this.pspdate2 = dateStr.split('--')[1];
+
+			this.bankcard = this.userInfo.userAttr.BANK_NO;
 		}
 	} //methods end
 };
@@ -298,128 +506,5 @@ page {
 }
 </style>
 <style scoped lang="less">
-@import '~utils/utils.less';
-
-.tips {
-	.flexCenter;
-	height: 85rpx;
-	padding: 0 29rpx;
-	color: @darkColor;
-	background-color: @lightColor;
-}
-
-.psp {
-	margin-bottom: 18rpx;
-	background-color: #fff;
-	// top
-	.top {
-		.flexCenter;
-		padding: 37rpx 36rpx;
-		margin-bottom: 24rpx;
-		.top_icon {
-			width: 82rpx;
-			height: 82rpx;
-			margin-right: 31rpx;
-		}
-		.top_content {
-			.flex1;
-			.title {
-				color: #000;
-				font-size: 28rpx;
-			}
-			.desc {
-				color: #4a4a4a;
-			}
-		}
-	}
-	// content
-	.content {
-		.flex;
-		.flexEvenly;
-		flex-wrap: wrap;
-		.psp_item {
-			.flexColumn;
-			.img_box {
-				width: 339rpx;
-				height: 242rpx;
-				position: relative;
-				background-color: #f1f1f1;
-				.img {
-					.positionCenter;
-					width: 236rpx;
-					height: 169rpx;
-				}
-				.photo {
-					.wh100;
-				}
-				.chongpai {
-					.flexCenter;
-					.flexJCenter;
-					width: 87rpx;
-					height: 42rpx;
-					border-radius: 21rpx;
-					background-color: @primaryColor;
-					color: #fff;
-					font-size: 19rpx;
-					position: absolute;
-					right: 16rpx;
-					bottom: 14rpx;
-				}
-			}
-			.title {
-				margin-top: 20rpx;
-				margin-bottom: 25rpx;
-				color: #4a4a4a;
-			}
-		}
-	}
-}
-
-// form
-.form {
-	background-color: #fff;
-	.form_item {
-		.flexCenter;
-		height: 85rpx;
-		border-bottom: 1rpx solid #d7d6d6;
-		padding: 0 24rpx 0 36rpx;
-		&:last-child {
-			border-bottom: none;
-		}
-		.input {
-			.flex1;
-			padding-left: 48rpx;
-		}
-	}
-}
-
-// tongyi
-.tongyi {
-	.flex;
-	margin: 18rpx 36rpx;
-	.content {
-		.flex1;
-		color: #9b9b9b;
-		.hover {
-			color: @primaryColor;
-		}
-	}
-}
-
-.btn {
-	.flexCenter;
-	.flexJCenter;
-	height: 89rpx;
-	background-color: #cacacb;
-	font-size: 28rpx;
-	color: #fff;
-	position: fixed;
-	width: 100%;
-	left: 0;
-	bottom: 0;
-	z-index: 11;
-	&.active {
-		background-color: @primaryColor;
-	}
-}
+@import './pspcard.less';
 </style>

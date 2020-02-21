@@ -1,1 +1,0 @@
-<view style="{{('height:'+height+'px;'+(styleStr?styleStr:''))}}"></view>

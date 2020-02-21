@@ -2,18 +2,18 @@
 	<view>
 		<view class="top">
 			<view class="total">
-				<view class="count" style="font-size: 56rpx;">4300</view>
+				<view class="count" style="font-size: 56rpx;">0.00</view>
 				<view class="desc">累计酬金（元）</view>
 			</view>
 
 			<view class="content">
 				<view class="item">
-					<view class="count" style="font-size:35rpx;">80</view>
+					<view class="count" style="font-size:35rpx;">0.00</view>
 					<view class="desc">今日酬金（元）</view>
 				</view>
 				<view class="line"></view>
 				<view class="item">
-					<view class="count" style="font-size:35rpx;">123</view>
+					<view class="count" style="font-size:35rpx;">0.00</view>
 					<view class="desc">本月酬金（元）</view>
 				</view>
 			</view>
@@ -48,12 +48,12 @@ export default {
 	data() {
 		return {
 			list: [
-				{
-					bank: '舒服舒服',
-					no: '多发点',
-					count: '是是是',
-					date: '发发发'
-				}
+				// {
+				// 	bank: '舒服舒服',
+				// 	no: '多发点',
+				// 	count: '是是是',
+				// 	date: '发发发'
+				// }
 			]
 		};
 	},

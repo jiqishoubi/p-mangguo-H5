@@ -7,10 +7,10 @@
 	"transformPx": false,
 	// 网络超时时间
 	"networkTimeout": {
-		"request": 20000,
-		"connectSocket": 20000,
-		"uploadFile": 20000,
-		"downloadFile": 20000
+		"request": 120000,
+		"connectSocket": 120000,
+		"uploadFile": 120000,
+		"downloadFile": 120000
 	},
 	/* 5+App特有相关 */
 	"app-plus": {
@@ -79,18 +79,19 @@
 		"usingComponents": true
 	},
 	"h5": {
-		// "router": {
-		// 	"base": "/mangguo/"
-		// },
-		// "devServer": {
-		// 	"https": true
-		// },
-		// "domain": "lexinh5.bld365.com",
-		// // "publicPath": "./",
+		"router": {
+			"base": "/mangguo/"
+		},
+		"devServer": {
+			"https": true
+		},
+		"domain": "lexinh5.bld365.com",
+		// "publicPath": "./",
 		"optimization": {
 			"treeShaking": {
 				"enable": true
 			}
-		}
+		},
+		"title": "便利电科技"
 	}
 }

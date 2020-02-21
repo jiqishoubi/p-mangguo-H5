@@ -1,7 +1,0 @@
-{
-  "navigationBarTitleText": "手写签名",
-  "usingComponents": {
-    "step": "/components/step",
-    "signature": "/components/signature"
-  }
-}

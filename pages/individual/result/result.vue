@@ -4,13 +4,13 @@
 
 		<view class="content">
 			<view class="box"><image class="img" :src="imgSrc" mode="aspectFit"></image></view>
-			<view class="large" @tap="lookLarge">
+			<!-- <view class="large" @tap="lookLarge">
 				<image class="large_icon" src="https://cdn.s.bld365.com/mangguoicon_search.png"></image>
 				查看大图
-			</view>
+			</view> -->
 		</view>
 
-		<button class="btn" hover-class="btn_active" @tap="saveLocal">保存到本地</button>
+		<button class="btn" hover-class="btn_active" @tap="saveLocal">完成</button>
 	</view>
 </template>
 
@@ -20,7 +20,7 @@ import step from '@/components/step.vue';
 export default {
 	data() {
 		return {
-			imgSrc: 'http://t7.baidu.com/it/u=378254553,3884800361&fm=79&app=86&f=JPEG?w=1280&h=2030'
+			imgSrc: 'https://cdn.s.bld365.com/mangguoresult_content_img.png'
 		};
 	},
 	components: {
@@ -49,7 +49,11 @@ export default {
 				urls: [self.imgSrc]
 			});
 		},
-		saveLocal() {}
+		saveLocal() {
+			uni.reLaunch({
+				url: '/pages/wode/wode_index/wode_index'
+			});
+		}
 	}
 };
 </script>

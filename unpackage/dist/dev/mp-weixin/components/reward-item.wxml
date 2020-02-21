@@ -1,1 +1,0 @@
-<view data-event-opts="{{[['tap',[['emitTap',['$event']]]]]}}" class="item" bindtap="__e"><view class="flexCenter flexBetween"><view style="color:#4A4A4A;font-size:29rpx;">{{"银行:"+bank+"("+no+")"}}</view><view class="count">{{count}}</view></view><view style="color:#9B9B9B;">{{date}}</view></view>

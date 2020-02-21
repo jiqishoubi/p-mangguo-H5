@@ -40,14 +40,19 @@
 
 <script>
 import step from '@/components/step.vue';
+import requestw from '@/utils/requestw.js';
+import allApiStr from '@/utils/allApiStr.js';
+import { globalHost } from '@/utils/utils.js';
 
 export default {
 	data() {
 		return {
-			threshold: 0.3, //阈值
-			data: null,
 			errorImg: 'https://cdn.s.bld365.com/mangguovideoresult_errorimg.png',
-			imgSrc: ''
+			threshold: 0.3, //阈值
+
+			data: null,
+			imgSrc: '',
+			tempFilePath: ''
 		};
 	},
 	computed: {
@@ -63,14 +68,14 @@ export default {
 	 * 周期
 	 */
 	onLoad(option) {
+		let mangguoVideoResult = uni.getStorageSync('mangguoVideoResult');
 		let result;
 		try {
-			result = JSON.parse(option.result);
+			result = JSON.parse(mangguoVideoResult.result);
 		} catch (e) {
 			return;
 		}
 
-		console.log(result);
 		if (result.code !== 200) {
 			uni.showModal({
 				title: '提示',
@@ -81,9 +86,11 @@ export default {
 			return;
 		}
 
+		console.log(result);
 		this.data = result.data;
-
-		this.imgSrc = 'data:image/jpeg;base64,' + result.data.pic_list[0].pic;
+		this.imgSrc = 'data:image/jpeg;base64,' + result.data.pic_list[result.data.pic_list.length - 1].pic;
+		this.tempFilePath = mangguoVideoResult.tempFilePath;
+		this.fileName = mangguoVideoResult.fileName;
 	},
 	onShow() {},
 	onReady() {},
@@ -98,9 +105,64 @@ export default {
 	 */
 	methods: {
 		chongpai() {
-			uni.navigateBack();
+			uni.redirectTo({
+				url: '/pages/individual/video/video'
+			});
 		},
-		nextStep() {
+		//上传视频到我们自己的服务器
+		uploadVideo() {
+			const self = this;
+			return new Promise(resolve => {
+				let postData = {
+					fileName: self.fileName,
+					fieldType: 'other',
+					ocrType: 'other'
+				};
+				uni.uploadFile({
+					url: globalHost() + allApiStr.ocrApi,
+					filePath: self.tempFilePath,
+					name: 'file',
+					formData: postData,
+					success: res => {
+						let data = null;
+						try {
+							data = JSON.parse(res.data);
+						} catch (e) {}
+						resolve(data);
+					}
+				});
+			});
+		},
+		// 保存结果
+		saveLiveResult(fileUrl) {
+			return new Promise(async resolve => {
+				let postData = {
+					score: this.data && this.data.score ? this.data.score : null, //   分数
+					liveCaptcha: this.data && this.data.code && this.data.code.create ? this.data.code.create : null, // 检测数字
+					checkVideoUrl: fileUrl // 视频地址
+				};
+				let res = await requestw({
+					url: allApiStr.saveLiveResultApi,
+					data: postData
+				});
+				resolve(res);
+			});
+		},
+		async nextStep() {
+			uni.showLoading({ title: '请稍候...', mask: true });
+			let res1 = await this.uploadVideo();
+			if (!res1 || res1.resultCode !== '200') {
+				uni.showToast({ title: res1.systemMessage ? res1.systemMessage : '上传视频失败', icon: 'none', mask: true });
+				return;
+			}
+
+			let res2 = await this.saveLiveResult(res1.value.FILE_URL);
+			if (res2.data.resultCode !== '200') {
+				uni.showToast({ title: res2.data.systemMessage ? res2.data.systemMessage : '保存活体检测信息失败', icon: 'none', mask: true });
+				return;
+			}
+
+			uni.hideLoading();
 			uni.navigateTo({
 				url: '/pages/individual/signature/signature'
 			});
