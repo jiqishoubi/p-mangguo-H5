@@ -152,17 +152,17 @@
 								return;
 							}
 
-							//三、签约
-							let res3 = await self.signAjax();
-							console.log(res3);
-							if (res3.resultCode !== '200') {
-								uni.showToast({
-									title: res3.systemMessage ? res3.systemMessage : '操作失败',
-									icon: 'none',
-									mask: true
-								});
-								return;
-							}
+							// //三、签约  // 2020.02.24改成后端调用
+							// let res3 = await self.signAjax();
+							// console.log(res3);
+							// if (res3.resultCode !== '200') {
+							// 	uni.showToast({
+							// 		title: res3.systemMessage ? res3.systemMessage : '操作失败',
+							// 		icon: 'none',
+							// 		mask: true
+							// 	});
+							// 	return;
+							// }
 
 							uni.hideLoading();
 							//四、跳转

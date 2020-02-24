@@ -80,8 +80,8 @@
 	},
 	"h5": {
 		"router": {
-			"base": "/mangguo/" //生产
-			// "base": "/mangguotest/" //测试
+			// "base": "/mangguo/" //生产
+			"base": "/mangguotest/" //测试
 		},
 		"devServer": {
 			"https": true
