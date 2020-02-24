@@ -90,7 +90,9 @@
 						url: allApiStr.saveSignatureApi,
 						data: {
 							handWriteSignature: fileUrl,
-							companyCode: uni.getStorageSync(companyCodeKey)
+							companyCode: uni.getStorageSync(companyCodeKey),
+							//2020.02.24新加参数
+							mchCode: uni.getStorageSync(mchCodeKey),
 						}
 					});
 					resolve(res.data);
