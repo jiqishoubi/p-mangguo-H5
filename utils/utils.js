@@ -1,7 +1,4 @@
-import {
-	host,
-	webProdHostArr
-} from '@/utils/const.js'
+import {host,webProdHostArr} from '@/utils/consts.js'
 
 /**
  * 后端请求域名

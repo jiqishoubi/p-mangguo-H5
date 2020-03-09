@@ -23,11 +23,7 @@
 	} from '@/utils/utils.js';
 	import allApiStr from '@/utils/allApiStr.js';
 	import requestw from '@/utils/requestw.js';
-	import {
-		mchCodeKey,
-		userInfoKey,
-		companyCodeKey
-	} from '@/utils/const.js';
+	import {mchCodeKey,userInfoKey,companyCodeKey} from '@/utils/consts.js';
 
 	export default {
 		data() {

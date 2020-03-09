@@ -1,12 +1,8 @@
 /**
  * 请求公共方法
  */
-import {
-	globalHost
-} from '@/utils/utils.js'
-import {
-	userInfoKey
-} from '@/utils/const.js'
+import {globalHost} from '@/utils/utils.js'
+import {userInfoKey} from '@/utils/consts.js'
 
 const requestw = ({
 	type = 'post',

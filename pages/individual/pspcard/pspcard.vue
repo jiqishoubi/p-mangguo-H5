@@ -93,7 +93,7 @@
 			</view>
 			<view class="form_item">
 				<view class="label">银行卡号</view>
-				<input class="input" placeholder="请输入任意一张银行卡卡号" v-model="bankcard" :disabled="haveSign" />
+				<input class="input" placeholder="输入本人银行卡卡号" v-model="bankcard" :disabled="haveSign" />
 			</view>
 			<view class="form_item">
 				<view class="label">手机号码</view>
@@ -119,11 +119,13 @@
 				<text v-if="!haveSign">
 					本人已阅读并同意
 					<text class="hover" @tap="clickProtocol">《三方协议》</text>
+					<text class="hover" @tap="clickProtocol2">《承诺书》</text>
 					全部条款，知晓提交验证码即代表本人真实意愿签署
 				</text>
 				<text v-else>
 					您已同意并签署
 					<text class="hover" @tap="clickProtocol">《三方协议》</text>
+					<text class="hover" @tap="clickProtocol2">《承诺书》</text>
 					的条款
 				</text>
 			</view>
@@ -147,7 +149,7 @@ import getsmsbtn from '@/components/getsmsbtn.vue';
 import { globalHost } from '@/utils/utils.js';
 import requestw from '@/utils/requestw.js';
 import allApiStr from '@/utils/allApiStr.js';
-import { mchCodeKey, companyCodeKey, userInfoKey, phoneNumberKey } from '@/utils/const.js';
+import { mchCodeKey, companyCodeKey, userInfoKey, phoneNumberKey, lexinCommitmentPdf } from '@/utils/consts.js';
 import { getUserInfoAjax } from './utils.js';
 
 export default {
@@ -446,6 +448,11 @@ export default {
 
 			uni.navigateTo({
 				url: `/pages/sign/signpddf/signpddf?pdfUrl=${this.protocolUrl}`
+			});
+		},
+		clickProtocol2() {
+			uni.navigateTo({
+				url: `/pages/sign/signpddf/signpddf?pdfUrl=${lexinCommitmentPdf}`
 			});
 		},
 		//checkbox

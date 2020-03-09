@@ -8,7 +8,7 @@
 <script>
 import patternCreator from '@/utils/patternCreator.js';
 import requestw from '@/utils/requestw.js';
-import { mchCodeKey } from '@/utils/const.js';
+import { mchCodeKey } from '@/utils/consts.js';
 
 export default {
 	data() {

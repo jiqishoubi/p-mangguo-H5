@@ -1,8 +1,6 @@
 import requestw from '@/utils/requestw.js'
 import allApiStr from '@/utils/allApiStr.js'
-import {
-	userInfoKey
-} from '@/utils/const.js'
+import {userInfoKey} from '@/utils/consts.js'
 
 /**
  * 获取芒果userInfo  用token换

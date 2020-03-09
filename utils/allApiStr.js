@@ -1,6 +1,4 @@
-import {
-	host_baidu
-} from '@/utils/const.js'
+import {host_baidu} from '@/utils/consts.js'
 
 const api = {
 	//登录页

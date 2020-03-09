@@ -16,7 +16,7 @@
 		{
 			"path": "pages/individual/pspcard/pspcard",
 			"style": {
-				"navigationBarTitleText": "个体工商注册"
+				"navigationBarTitleText": "合作伙伴注册"
 			}
 		},
 		{
@@ -40,7 +40,7 @@
 		{
 			"path": "pages/individual/result/result",
 			"style": {
-				"navigationBarTitleText": "个体工商注册"
+				"navigationBarTitleText": "合作伙伴注册"
 			}
 		},
 		// 签约信息

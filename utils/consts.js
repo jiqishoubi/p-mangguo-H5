@@ -3,7 +3,7 @@ export const host = {
 	prod: 'https://pay.bld365.com',
 }
 
-export const webProdHostArr=[
+export const webProdHostArr = [
 	`//lexinh5.bld365.com/mangguo/index`
 ]
 
@@ -19,6 +19,8 @@ export const mchCodeListSelect = [{
 		value: 'MCH202001060001'
 	}
 ]
+
+export const lexinCommitmentPdf = 'https://filedown.bld365.com/lexin/protocol/20200309/%E4%B9%90%E8%96%AA%E6%89%BF%E8%AF%BA%E4%B9%A6.pdf' //乐薪承诺书pdf 七牛地址
 
 // localStorage
 export const userInfoKey = 'mangguoUserInfo'

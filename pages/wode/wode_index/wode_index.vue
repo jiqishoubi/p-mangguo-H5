@@ -53,7 +53,7 @@
 
 <script>
 import mpCompleteNavbarHeight from '@/components/mp-completeNavbarHeight.vue';
-import { userInfoKey } from '@/utils/const.js';
+import { userInfoKey } from '@/utils/consts.js';
 //services
 import { getUserInfoAjax } from '@/pages/individual/pspcard/utils.js';
 

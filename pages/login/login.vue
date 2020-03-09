@@ -47,7 +47,7 @@ import getsmsbtn from '@/components/getsmsbtn.vue';
 import { globalHost } from '@/utils/utils.js';
 import requestw from '@/utils/requestw.js';
 import allApiStr from '@/utils/allApiStr.js';
-import { userInfoKey, phoneNumberKey, mchCodeKey, companyCodeKey, mchCodeListSelect } from '@/utils/const.js';
+import { userInfoKey, phoneNumberKey, mchCodeKey, companyCodeKey, mchCodeListSelect } from '@/utils/consts.js';
 
 export default {
 	data() {
