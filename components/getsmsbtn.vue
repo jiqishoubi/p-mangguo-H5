@@ -32,7 +32,6 @@ export default {
 	beforeDestroy() {},
 	destroyed() {},
 	/**
-	/**
 	 * 方法
 	 */
 	methods: {

@@ -149,7 +149,7 @@ import getsmsbtn from '@/components/getsmsbtn.vue';
 import { globalHost } from '@/utils/utils.js';
 import requestw from '@/utils/requestw.js';
 import allApiStr from '@/utils/allApiStr.js';
-import { mchCodeKey, companyCodeKey, userInfoKey, phoneNumberKey, lexinCommitmentPdf } from '@/utils/consts.js';
+import { mchCodeKey, companyCodeKey, userInfoKey, phoneNumberKey } from '@/utils/consts.js';
 import { getUserInfoAjax } from './utils.js';
 
 export default {
@@ -182,6 +182,10 @@ export default {
 			//tongyi
 			checkboxVal: false,
 			protocolUrl: '', //协议
+
+			//承诺书
+			oldPdfUrl: '',
+			newPdfUrl: '',
 
 			//loading
 			loading_getUserInfo: false
@@ -263,6 +267,9 @@ export default {
 		setTimeout(() => {
 			this.getProtocol();
 		}, 500);
+
+		// //承诺书
+		// this.getPdfOrigin();
 	},
 	onShow() {},
 	onReady() {},
@@ -284,7 +291,6 @@ export default {
 				url: this.haveSign ? allApiStr.getProtocolSignApi : allApiStr.getProtocolApi,
 				data: { companyCode: uni.getStorageSync(companyCodeKey) }
 			});
-			console.log(res);
 			if (res.data.resultCode == '200') {
 				//两个返回的格式不一样
 				if (this.haveSign) {
@@ -450,9 +456,11 @@ export default {
 				url: `/pages/sign/signpddf/signpddf?pdfUrl=${this.protocolUrl}`
 			});
 		},
-		clickProtocol2() {
+		async clickProtocol2() {
+			let url = await this.getPdfNewWrap();
+			if (!url) return;
 			uni.navigateTo({
-				url: `/pages/sign/signpddf/signpddf?pdfUrl=${lexinCommitmentPdf}`
+				url: `/pages/sign/signpddf/signpddf?pdfUrl=${url}`
 			});
 		},
 		//checkbox
@@ -502,7 +510,81 @@ export default {
 			this.pspdate2 = dateStr.split('--')[1];
 
 			this.bankcard = this.userInfo.userAttr.BANK_NO;
+		},
+		//承诺书相关
+		//获取原版承诺书
+		async getPdfOrigin() {
+			let res = await requestw({
+				url: allApiStr.getPdfOriginApi
+			});
+			if (res.data.resultCode !== '200') {
+				uni.showToast({ title: '承诺书获取失败', icon: 'none' });
+				return;
+			}
+			this.oldPdfUrl = res.data.value;
+		},
+		//承诺书签字
+		signPdfFunc() {
+			return new Promise(async resolve => {
+				if (this.pspname == '') {
+					uni.showToast({
+						title: '请先识别身份证',
+						icon: 'none'
+					});
+					resolve(null);
+					return;
+				}
+				let res = await requestw({
+					url: allApiStr.signPdfFuncApi,
+					data: {
+						userCode: uni.getStorageSync(userInfoKey).USER_CODE,
+						userName: this.pspname,
+						idNo: this.pspcard
+					}
+				});
+				if (res.data.resultCode != '200') {
+					uni.showToast({
+						title: res.data.systemMessage ? res.data.systemMessage : '获取失败',
+						icon: 'none'
+					});
+					resolve(null);
+					return;
+				}
+				resolve(res.data.value);
+			});
+		},
+		// //获取已签字的新的承诺书
+		// getPdfNew() {
+		// 	return new Promise(async () => {
+		// 		let res = await requestw({
+		// 			url: allApiStr.getPdfNewApi,
+		// 			data: { userCode: uni.getStorageSync(userInfoKey).USER_CODE }
+		// 		});
+		// 	});
+		// },
+		getPdfNewWrap() {
+			return new Promise(async resolve => {
+				if (this.newPdfUrl) {
+					resolve(this.newPdfUrl);
+					return;
+				}
+
+				uni.showLoading({
+					title: '请稍候...',
+					mask: true
+				});
+				let res1 = await this.signPdfFunc();
+				// let res2 = await this.getPdfNew();
+				uni.hideLoading();
+				if (!res1) {
+					resolve(null);
+					return;
+				}
+				this.newPdfUrl = res1;
+				resolve(res1);
+			});
 		}
+		//承诺书相关 end
 	} //methods end
 };
 </script>

@@ -14,6 +14,11 @@ const api = {
 	signApi: '/app/company/bindEmployee', //签约
 	getProtocolApi: '/app/bind/getProtocol', //获取签约协议
 	getProtocolSignApi: '/app/bind/querySignProtocol', //获取签约协议 签约后的
+	
+	//承诺书相关
+	getPdfOriginApi:'/app/sign/mangguo/getAgreementPreviewUrl', //获取原版承诺书
+	signPdfFuncApi:'/app/sign/mangguo/signAgreement', //承诺书签字
+	getPdfNewApi:'/app/sign/mangguo/getUserSignedAgreement', //获取已签字的新的承诺书
 
 	//百度H5视频活体检测
 	getVoiceCountApi: host_baidu + '/api/randomKey', //获取语音码

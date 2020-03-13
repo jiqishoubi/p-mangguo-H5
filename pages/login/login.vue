@@ -11,10 +11,11 @@
 		<view class="form">
 			<view class="form_item">
 				<image class="form_item_icon" src="https://cdn.s.bld365.com/mangguologin_form_item_icon_03.png"></image>
-				<picker class="form_input h100 flexCenter" mode="selector" :range="mchCodeListSelect" range-key="text" :value="mchCodeListSelectIndex" @change="mchCodeChange">
+				<!-- <picker class="form_input h100 flexCenter" mode="selector" :range="mchCodeListSelect" range-key="text" :value="mchCodeListSelectIndex" @change="mchCodeChange">
 					<text style="color: grey;">选择商户：</text>
 					{{ mchCodeListSelect[mchCodeListSelectIndex].text }}
-				</picker>
+				</picker> -->
+				<picker-merchant @onConfirm="pickerMerchantConfirm"></picker-merchant>
 			</view>
 			<view class="form_item">
 				<image class="form_item_icon" src="https://cdn.s.bld365.com/mangguologin_form_item_icon_01.png"></image>
@@ -23,15 +24,7 @@
 			<view class="form_item">
 				<image class="form_item_icon" src="https://cdn.s.bld365.com/mangguologin_form_item_icon_02.png"></image>
 				<input class="form_input" type="number" placeholder="请输入验证码" v-model="smsCode" maxlength="6" />
-				<getsmsbtn
-					ref="getsmsbtn"
-					limitSecond="60"
-					type="get"
-					:allUrl="allUrl"
-					:phoneNumber="phoneNumber"
-					:mchCode="mchCodeListSelect[mchCodeListSelectIndex].value"
-					style="color:#4185f4"
-				></getsmsbtn>
+				<getsmsbtn ref="getsmsbtn" limitSecond="60" type="get" :allUrl="allUrl" :phoneNumber="phoneNumber" :mchCode="merchantCode" style="color:#4185f4"></getsmsbtn>
 			</view>
 		</view>
 
@@ -44,6 +37,7 @@
 // 组件
 import mpCompleteNavbarHeight from '@/components/mp-completeNavbarHeight.vue';
 import getsmsbtn from '@/components/getsmsbtn.vue';
+import pickerMerchant from '@/components/picker-merchant.vue';
 import { globalHost } from '@/utils/utils.js';
 import requestw from '@/utils/requestw.js';
 import allApiStr from '@/utils/allApiStr.js';
@@ -57,7 +51,8 @@ export default {
 			// form
 			phoneNumber: '',
 			smsCode: '',
-			mchCodeListSelectIndex: 0, //选择的哪个mchCode
+			// mchCodeListSelectIndex: 0, //选择的哪个mchCode
+			merchantCode: '',
 
 			// getsmsbtn
 			allUrl: globalHost() + allApiStr.getSmsLogin
@@ -65,17 +60,26 @@ export default {
 	},
 	components: {
 		mpCompleteNavbarHeight,
-		getsmsbtn
+		getsmsbtn,
+		pickerMerchant
 	},
 	methods: {
-		mchCodeChange(e) {
-			let index = e.detail.value;
-			this.mchCodeListSelectIndex = index;
+		// mchCodeChange(e) {
+		// 	let index = e.detail.value;
+		// 	this.mchCodeListSelectIndex = index;
+
+		// 	this.phoneNumber = '';
+		// 	this.smsCode = '';
+		// 	this.$refs.getsmsbtn.endTimer();
+		// },
+		pickerMerchantConfirm(res) {
+			this.merchantCode = res.key;
 
 			this.phoneNumber = '';
 			this.smsCode = '';
 			this.$refs.getsmsbtn.endTimer();
 		},
+		//登录
 		async login() {
 			//验证
 			if (this.phoneNumber == '' || this.smsCode == '') {
@@ -90,7 +94,7 @@ export default {
 				data: {
 					phoneNumber: this.phoneNumber,
 					smsCaptcha: this.smsCode,
-					mchCode: this.mchCodeListSelect[this.mchCodeListSelectIndex] ? this.mchCodeListSelect[this.mchCodeListSelectIndex].value : null
+					mchCode: this.merchantCode ? this.merchantCode : null
 				}
 			});
 			if (res.data.resultCode !== '200') {
@@ -101,7 +105,8 @@ export default {
 			uni.hideLoading();
 			uni.setStorageSync(userInfoKey, res.data.value);
 			uni.setStorageSync(phoneNumberKey, this.phoneNumber);
-			uni.setStorageSync(mchCodeKey, this.mchCodeListSelect[this.mchCodeListSelectIndex].value);
+			// uni.setStorageSync(mchCodeKey, this.mchCodeListSelect[this.mchCodeListSelectIndex].value);
+			uni.setStorageSync(mchCodeKey, this.merchantCode);
 			uni.setStorageSync(companyCodeKey, res.data.value.employeeMap && res.data.value.employeeMap.COMPANY_CODE ? res.data.value.employeeMap.COMPANY_CODE : null);
 			uni.reLaunch({
 				url: '/pages/wode/wode_index/wode_index'

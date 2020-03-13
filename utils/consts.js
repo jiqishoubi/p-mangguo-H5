@@ -10,6 +10,7 @@ export const webProdHostArr = [
 // export const host_baidu = 'http://49.4.15.72:7238'
 export const host_baidu = 'https://ocr.bld365.com'
 
+//现在使用picker merchant ，现在没用了
 export const mchCodeListSelect = [{
 		text: '芒果网络',
 		value: 'MCH202001070001'
