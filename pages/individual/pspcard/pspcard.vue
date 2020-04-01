@@ -1,6 +1,6 @@
 <template>
 	<view v-if="!loading_getUserInfo">
-		<step active="0"></step>
+		<step v-if="!haveRealname" active="0"></step>
 
 		<view v-if="!haveRealname" class="tips">信息仅用于身份验证，平台保障您的信息安全</view>
 
@@ -146,7 +146,7 @@
 import { uniCalendar } from '@dcloudio/uni-ui';
 import step from '@/components/step.vue';
 import getsmsbtn from '@/components/getsmsbtn.vue';
-import { globalHost } from '@/utils/utils.js';
+import { globalHost, trimw } from '@/utils/utils.js';
 import requestw from '@/utils/requestw.js';
 import allApiStr from '@/utils/allApiStr.js';
 import { mchCodeKey, companyCodeKey, userInfoKey, phoneNumberKey } from '@/utils/consts.js';
@@ -249,11 +249,15 @@ export default {
 	async onLoad() {
 		// token
 		let userInfo = uni.getStorageSync(userInfoKey);
+		console.log(userInfo);
 		this.token = userInfo && userInfo.TOKEN ? userInfo.TOKEN : null;
 		this.phone = uni.getStorageSync(phoneNumberKey);
 
 		//ajax获取userInfo
-		uni.showLoading({ title: '请稍候...', mask: true });
+		uni.showLoading({
+			title: '请稍候...',
+			mask: true
+		});
 		this.loading_getUserInfo = true;
 		let res = await getUserInfoAjax(this.token);
 		this.loading_getUserInfo = false;
@@ -268,8 +272,8 @@ export default {
 			this.getProtocol();
 		}, 500);
 
-		// //承诺书
-		// this.getPdfOrigin();
+		//承诺书
+		this.getPdfOrigin();
 	},
 	onShow() {},
 	onReady() {},
@@ -289,7 +293,9 @@ export default {
 			let res = await requestw({
 				type: 'get',
 				url: this.haveSign ? allApiStr.getProtocolSignApi : allApiStr.getProtocolApi,
-				data: { companyCode: uni.getStorageSync(companyCodeKey) }
+				data: {
+					companyCode: uni.getStorageSync(companyCodeKey)
+				}
 			});
 			if (res.data.resultCode == '200') {
 				//两个返回的格式不一样
@@ -321,7 +327,10 @@ export default {
 				fieldType,
 				ocrType
 			};
-			uni.showLoading({ title: '请稍候...', mask: true });
+			uni.showLoading({
+				title: '请稍候...',
+				mask: true
+			});
 			uni.uploadFile({
 				url: globalHost() + allApiStr.ocrApi,
 				filePath: tempFilePath,
@@ -333,7 +342,11 @@ export default {
 					try {
 						data = JSON.parse(res.data);
 					} catch (e) {
-						uni.showToast({ title: '识别失败，请稍后再试', icon: 'none', mask: true });
+						uni.showToast({
+							title: '识别失败，请稍后再试',
+							icon: 'none',
+							mask: true
+						});
 						return;
 					}
 
@@ -355,11 +368,11 @@ export default {
 					holdPspt: this.photo2, //   手持
 					headless: this.photo3, //  免冠
 					creditReportPhoto: this.photo4, // 征信
-					psptName: this.pspname, //  姓名
-					psptNo: this.pspcard, //   身份证号
+					psptName: trimw(this.pspname), //  姓名
+					psptNo: trimw(this.pspcard), //   身份证号
 					effectiveDate: this.pspdate1 + '--' + this.pspdate2, //  有效期
-					bankNo: this.bankcard, //   银行卡号
-					phone: this.phone, //   电话
+					bankNo: trimw(this.bankcard), //   银行卡号
+					phone: trimw(this.phone), //   电话
 					smsCaptcha: this.smscode //  验证码
 				};
 				let res = await requestw({
@@ -421,11 +434,18 @@ export default {
 		},
 		otherCallback(index, res) {
 			if (res.resultCode !== '200') {
-				uni.showToast({ title: res.systemMessage ? res.systemMessage : '操作失败', icon: 'none', mask: true });
+				uni.showToast({
+					title: res.systemMessage ? res.systemMessage : '操作失败',
+					icon: 'none',
+					mask: true
+				});
 				return;
 			}
 
-			uni.showToast({ title: '操作成功', icon: 'none' });
+			uni.showToast({
+				title: '操作成功',
+				icon: 'none'
+			});
 			this['photo' + index] = res.value.FILE_URL;
 		},
 		clickchongpai(index) {
@@ -448,19 +468,16 @@ export default {
 		//点击查看协议
 		clickProtocol() {
 			if (!this.protocolUrl) {
-				uni.showToast({ title: '获取协议失败', icon: 'none', mask: true });
+				uni.showToast({
+					title: '获取协议失败',
+					icon: 'none',
+					mask: true
+				});
 				return;
 			}
 
 			uni.navigateTo({
 				url: `/pages/sign/signpddf/signpddf?pdfUrl=${this.protocolUrl}`
-			});
-		},
-		async clickProtocol2() {
-			let url = await this.getPdfNewWrap();
-			if (!url) return;
-			uni.navigateTo({
-				url: `/pages/sign/signpddf/signpddf?pdfUrl=${url}`
 			});
 		},
 		//checkbox
@@ -471,19 +488,34 @@ export default {
 		async clickNext() {
 			//验证
 			if (!this.btnActive) {
-				uni.showToast({ title: '信息请填写完整，并勾选同意协议', icon: 'none', mask: true });
+				uni.showToast({
+					title: '信息请填写完整，并勾选同意协议',
+					icon: 'none',
+					mask: true
+				});
 				return;
 			}
 
 			//实名认证
 			if (!this.haveRealname) {
-				uni.showLoading({ title: '请稍候...', mask: true });
+				uni.showLoading({
+					title: '请稍候...',
+					mask: true
+				});
 				let res = await this.realNameAjax();
 				if (res.resultCode !== '200') {
-					uni.showToast({ title: res.systemMessage ? res.systemMessage : '操作失败', icon: 'none', mask: true });
+					uni.showToast({
+						title: res.systemMessage ? res.systemMessage : '操作失败',
+						icon: 'none',
+						mask: true
+					});
 					return;
 				}
-				uni.showToast({ title: '操作成功', icon: 'none', mask: true });
+				uni.showToast({
+					title: '操作成功',
+					icon: 'none',
+					mask: true
+				});
 			}
 			//实名认证 end
 
@@ -512,13 +544,39 @@ export default {
 			this.bankcard = this.userInfo.userAttr.BANK_NO;
 		},
 		//承诺书相关
+		async clickProtocol2() {
+			let srcUrl = '';
+			if (this.haveRealname) {
+				//已实名
+				let url = await this.getPdfNew();
+				if (!url) return;
+				srcUrl = url;
+			} else {
+				//未实名
+				if (this.checkboxVal) {
+					//同意
+					let url = await this.getPdfNewWrap();
+					if (!url) return;
+					srcUrl = url;
+				} else {
+					//没勾选同意
+					srcUrl = this.oldPdfUrl;
+				}
+			}
+			uni.navigateTo({
+				url: `/pages/sign/signpddf/signpddf?pdfUrl=${srcUrl}`
+			});
+		},
 		//获取原版承诺书
 		async getPdfOrigin() {
 			let res = await requestw({
 				url: allApiStr.getPdfOriginApi
 			});
 			if (res.data.resultCode !== '200') {
-				uni.showToast({ title: '承诺书获取失败', icon: 'none' });
+				uni.showToast({
+					title: '承诺书获取失败',
+					icon: 'none'
+				});
 				return;
 			}
 			this.oldPdfUrl = res.data.value;
@@ -553,15 +611,27 @@ export default {
 				resolve(res.data.value);
 			});
 		},
-		// //获取已签字的新的承诺书
-		// getPdfNew() {
-		// 	return new Promise(async () => {
-		// 		let res = await requestw({
-		// 			url: allApiStr.getPdfNewApi,
-		// 			data: { userCode: uni.getStorageSync(userInfoKey).USER_CODE }
-		// 		});
-		// 	});
-		// },
+		//获取已签字的新的承诺书
+		getPdfNew() {
+			return new Promise(async resolve => {
+				let res = await requestw({
+					url: allApiStr.getPdfNewApi,
+					data: {
+						userCode: uni.getStorageSync(userInfoKey).USER_CODE
+					}
+				});
+				console.log(res);
+				if (res.data.resultCode != '200') {
+					uni.showToast({
+						title: res.data.systemMessage ? res.data.systemMessage : '获取失败',
+						icon: 'none'
+					});
+					resolve(null);
+					return;
+				}
+				resolve(res.data.value);
+			});
+		},
 		getPdfNewWrap() {
 			return new Promise(async resolve => {
 				if (this.newPdfUrl) {

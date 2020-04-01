@@ -79,15 +79,9 @@
 		"usingComponents": true
 	},
 	"h5": {
-		"router": {
-			"base": "/mangguo/" //生产
-			// "base": "/mangguotest/" //测试
-		},
-		"devServer": {
-			"https": true
-		},
-		"domain": "lexinh5.bld365.com",
-		// "publicPath": "./",
+		"router": {},
+		"devServer": {},
+		"publicPath": "./",
 		"optimization": {
 			"treeShaking": {
 				"enable": true
