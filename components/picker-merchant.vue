@@ -123,7 +123,12 @@ export default {
 								{
 									text: '万荣店',
 									key: 'MCH202003300001'
-								}
+								},
+								{ text: '悦鑫店', key: 'MCH202004020003' },
+								{ text: '观澜店', key: 'MCH202004070005' },
+								{ text: '壹海店', key: 'MCH202004100003' },
+								{ text: '宝岛店', key: 'MCH202004100004' },
+								{ text: '友和店', key: 'MCH202004100001' }
 							]
 						},
 						{
@@ -208,10 +213,6 @@ export default {
 								{
 									text: '合冠店',
 									key: 'MCH202003110048'
-								},
-								{
-									text: '名旺店',
-									key: 'MCH202003110046'
 								},
 								{
 									text: '永兴店',
@@ -320,7 +321,14 @@ export default {
 								{
 									text: '泰都店',
 									key: 'MCH202003300002'
-								}
+								},
+								{ text: '上城店', key: 'MCH202004020001' },
+								{ text: '锦林店', key: 'MCH202004020002' },
+								{ text: '熙胤店', key: 'MCH202004070002' },
+								{ text: '云来店', key: 'MCH202004070003' },
+								{ text: '汇置店', key: 'MCH202004070004' },
+								{ text: '启厦店', key: 'MCH202004100002' },
+								{ text: '御辰店', key: 'MCH202003310002' },
 							]
 						}
 					]
@@ -349,7 +357,7 @@ export default {
 			],
 			value: [0, 0, 0],
 			showText: '选择商户'
-		};
+		}
 	},
 	// computed: {
 	// 	range() {
@@ -377,17 +385,17 @@ export default {
 	 */
 	methods: {
 		onColumnchange(e) {
-			let d = e.detail;
-			this.value[d.column] = d.value;
-			this.range = [this.source, this.source[this.value[0]].children, this.source[this.value[0]].children[this.value[1]].children];
+			let d = e.detail
+			this.value[d.column] = d.value
+			this.range = [this.source, this.source[this.value[0]].children, this.source[this.value[0]].children[this.value[1]].children]
 		},
 		onChange(e) {
-			let valObj = this.source[this.value[0]].children[this.value[1]].children[this.value[2]];
-			this.showText = valObj.text;
-			this.$emit('onConfirm', valObj);
+			let valObj = this.source[this.value[0]].children[this.value[1]].children[this.value[2]]
+			this.showText = valObj.text
+			this.$emit('onConfirm', valObj)
 		}
 	}
-};
+}
 </script>
 
 <style lang="less"></style>

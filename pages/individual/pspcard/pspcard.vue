@@ -118,13 +118,13 @@
 			<view class="content">
 				<text v-if="!haveSign">
 					本人已阅读并同意
-					<text class="hover" @tap="clickProtocol">《三方协议》</text>
+					<text class="hover" @tap="clickProtocol">《双方协议》</text>
 					<text class="hover" @tap="clickProtocol2">《承诺书》</text>
 					全部条款，知晓提交验证码即代表本人真实意愿签署
 				</text>
 				<text v-else>
 					您已同意并签署
-					<text class="hover" @tap="clickProtocol">《三方协议》</text>
+					<text class="hover" @tap="clickProtocol">《双方协议》</text>
 					<text class="hover" @tap="clickProtocol2">《承诺书》</text>
 					的条款
 				</text>
@@ -143,14 +143,14 @@
 </template>
 
 <script>
-import { uniCalendar } from '@dcloudio/uni-ui';
-import step from '@/components/step.vue';
-import getsmsbtn from '@/components/getsmsbtn.vue';
-import { globalHost, trimw } from '@/utils/utils.js';
-import requestw from '@/utils/requestw.js';
-import allApiStr from '@/utils/allApiStr.js';
-import { mchCodeKey, companyCodeKey, userInfoKey, phoneNumberKey } from '@/utils/consts.js';
-import { getUserInfoAjax } from './utils.js';
+import { uniCalendar } from '@dcloudio/uni-ui'
+import step from '@/components/step.vue'
+import getsmsbtn from '@/components/getsmsbtn.vue'
+import { globalHost, trimw } from '@/utils/utils.js'
+import requestw from '@/utils/requestw.js'
+import allApiStr from '@/utils/allApiStr.js'
+import { mchCodeKey, companyCodeKey, userInfoKey, phoneNumberKey } from '@/utils/consts.js'
+import { getUserInfoAjax } from './utils.js'
 
 export default {
 	data() {
@@ -189,12 +189,12 @@ export default {
 
 			//loading
 			loading_getUserInfo: false
-		};
+		}
 	},
 	computed: {
 		//发验证码之前的校验
 		validBeforeFlag() {
-			let flag = true;
+			let flag = true
 			if (
 				this.photo0 == '' ||
 				this.photo1 == '' ||
@@ -207,24 +207,24 @@ export default {
 				this.pspdate2 == '' ||
 				this.bankcard == ''
 			) {
-				flag = false;
+				flag = false
 			}
-			return flag;
+			return flag
 		},
 		btnActive() {
 			if (!this.haveRealname) {
-				let flag = true;
+				let flag = true
 				if (!this.validBeforeFlag || this.phone == '' || this.smscode == '' || !this.checkboxVal) {
-					flag = false;
+					flag = false
 				}
-				return flag;
+				return flag
 			} else {
-				return this.checkboxVal;
+				return this.checkboxVal
 			}
 		},
 		//是否实名
 		haveRealname() {
-			return this.userInfo && this.userInfo.userAuthInfo && this.userInfo.userAuthInfo.REAL_NAME;
+			return this.userInfo && this.userInfo.userAuthInfo && this.userInfo.userAuthInfo.REAL_NAME
 		},
 		//是否签约
 		haveSign() {
@@ -235,7 +235,7 @@ export default {
 				this.userInfo.userAttr &&
 				this.userInfo.userAttr.HOLD_PSPT_PHOTO &&
 				this.userInfo.userAttr.HAND_WRITE_SIGNATURE
-			);
+			)
 		}
 	},
 	components: {
@@ -248,32 +248,32 @@ export default {
 	 */
 	async onLoad() {
 		// token
-		let userInfo = uni.getStorageSync(userInfoKey);
-		console.log(userInfo);
-		this.token = userInfo && userInfo.TOKEN ? userInfo.TOKEN : null;
-		this.phone = uni.getStorageSync(phoneNumberKey);
+		let userInfo = uni.getStorageSync(userInfoKey)
+		console.log(userInfo)
+		this.token = userInfo && userInfo.TOKEN ? userInfo.TOKEN : null
+		this.phone = uni.getStorageSync(phoneNumberKey)
 
 		//ajax获取userInfo
 		uni.showLoading({
 			title: '请稍候...',
 			mask: true
-		});
-		this.loading_getUserInfo = true;
-		let res = await getUserInfoAjax(this.token);
-		this.loading_getUserInfo = false;
-		uni.hideLoading();
-		this.userInfo = res.value;
+		})
+		this.loading_getUserInfo = true
+		let res = await getUserInfoAjax(this.token)
+		this.loading_getUserInfo = false
+		uni.hideLoading()
+		this.userInfo = res.value
 		if (this.userInfo && this.userInfo.userAuthInfo && this.userInfo.userAuthInfo.REAL_NAME) {
-			this.realnameRender();
+			this.realnameRender()
 		}
 
 		//协议信息
 		setTimeout(() => {
-			this.getProtocol();
-		}, 500);
+			this.getProtocol()
+		}, 500)
 
 		//承诺书
-		this.getPdfOrigin();
+		this.getPdfOrigin()
 	},
 	onShow() {},
 	onReady() {},
@@ -296,67 +296,67 @@ export default {
 				data: {
 					companyCode: uni.getStorageSync(companyCodeKey)
 				}
-			});
+			})
 			if (res.data.resultCode == '200') {
 				//两个返回的格式不一样
 				if (this.haveSign) {
-					this.protocolUrl = res.data.value && res.data.value.signedProtocolUrl ? res.data.value.signedProtocolUrl : '';
+					this.protocolUrl = res.data.value && res.data.value.signedProtocolUrl ? res.data.value.signedProtocolUrl : ''
 				} else {
-					this.protocolUrl = res.data.value;
+					this.protocolUrl = res.data.value
 				}
 			}
 		},
 		//ocr身份证识别
 		ocrAjax(tempFilePath, file, index) {
-			const self = this;
-			this['photo' + index] = '';
+			const self = this
+			this['photo' + index] = ''
 
-			let fieldType, ocrType;
+			let fieldType, ocrType
 			if (index == 0) {
-				fieldType = 'PSPT_POSITIVE';
-				ocrType = 'ID_CARD_FRONT';
+				fieldType = 'PSPT_POSITIVE'
+				ocrType = 'ID_CARD_FRONT'
 			} else if (index == 1) {
-				fieldType = 'PSPT_NEGATIVE';
-				ocrType = 'ID_CARD_BACK';
+				fieldType = 'PSPT_NEGATIVE'
+				ocrType = 'ID_CARD_BACK'
 			} else {
-				fieldType = 'other';
-				ocrType = 'other';
+				fieldType = 'other'
+				ocrType = 'other'
 			}
 			let postData = {
 				fileName: file.name,
 				fieldType,
 				ocrType
-			};
+			}
 			uni.showLoading({
 				title: '请稍候...',
 				mask: true
-			});
+			})
 			uni.uploadFile({
 				url: globalHost() + allApiStr.ocrApi,
 				filePath: tempFilePath,
 				name: 'file',
 				formData: postData,
 				success: res => {
-					uni.hideLoading();
-					let data;
+					uni.hideLoading()
+					let data
 					try {
-						data = JSON.parse(res.data);
+						data = JSON.parse(res.data)
 					} catch (e) {
 						uni.showToast({
 							title: '识别失败，请稍后再试',
 							icon: 'none',
 							mask: true
-						});
-						return;
+						})
+						return
 					}
 
 					if (index == 0 || index == 1) {
-						self.ocrCallback(index, data);
+						self.ocrCallback(index, data)
 					} else {
-						self.otherCallback(index, data);
+						self.otherCallback(index, data)
 					}
 				}
-			});
+			})
 		},
 		//注册实名
 		realNameAjax() {
@@ -374,13 +374,13 @@ export default {
 					bankNo: trimw(this.bankcard), //   银行卡号
 					phone: trimw(this.phone), //   电话
 					smsCaptcha: this.smscode //  验证码
-				};
+				}
 				let res = await requestw({
 					url: allApiStr.realNameApi,
 					data: postData
-				});
-				resolve(res.data);
-			});
+				})
+				resolve(res.data)
+			})
 		},
 		//**********************services end**************************************************************************************************************************
 		clickbox(index) {
@@ -389,25 +389,25 @@ export default {
 				uni.previewImage({
 					urls: [this['photo' + index]],
 					longPressActions: true
-				});
+				})
 			} else {
-				this.openChooseImage(index);
+				this.openChooseImage(index)
 			}
 		},
 		openChooseImage(index) {
-			const self = this;
+			const self = this
 			uni.chooseImage({
 				count: 1,
 				sizeType: ['compressed'],
 				success: res => {
 					if (res.errMsg && res.errMsg.indexOf(':ok') > -1 && res.tempFilePaths && res.tempFilePaths[0]) {
-						let tempFilePath = res.tempFilePaths[0];
-						let file = res.tempFiles[0];
+						let tempFilePath = res.tempFilePaths[0]
+						let file = res.tempFiles[0]
 
-						self.ocrAjax(tempFilePath, file, index);
+						self.ocrAjax(tempFilePath, file, index)
 					}
 				}
-			});
+			})
 		},
 		ocrCallback(index, res) {
 			if (!res || res.resultCode !== '200' || !res.value || !res.value.OCR_DATA || (index == 0 ? !res.value.OCR_DATA['姓名'] : !res.value.OCR_DATA['失效日期'])) {
@@ -415,22 +415,22 @@ export default {
 					title: 'OCR识别失败' + res.systemMessage,
 					icon: 'none',
 					mask: true
-				});
-				return;
+				})
+				return
 			}
 
 			if (res.value.OCR_DATA['姓名']) {
-				this.pspname = res.value.OCR_DATA['姓名'];
-				this.pspcard = res.value.OCR_DATA['公民身份号码'];
+				this.pspname = res.value.OCR_DATA['姓名']
+				this.pspcard = res.value.OCR_DATA['公民身份号码']
 			}
 			if (res.value.OCR_DATA['签发日期']) {
-				let dateStr1 = res.value.OCR_DATA['签发日期'];
-				let dateStr2 = res.value.OCR_DATA['失效日期'];
+				let dateStr1 = res.value.OCR_DATA['签发日期']
+				let dateStr2 = res.value.OCR_DATA['失效日期']
 
-				this.pspdate1 = dateStr1.substring(0, 4) + '-' + dateStr1.substring(4, 6) + '-' + dateStr1.substring(6, 8);
-				this.pspdate2 = dateStr2 == '长期' ? dateStr2 : dateStr2.substring(0, 4) + '-' + dateStr2.substring(4, 6) + '-' + dateStr2.substring(6, 8);
+				this.pspdate1 = dateStr1.substring(0, 4) + '-' + dateStr1.substring(4, 6) + '-' + dateStr1.substring(6, 8)
+				this.pspdate2 = dateStr2 == '长期' ? dateStr2 : dateStr2.substring(0, 4) + '-' + dateStr2.substring(4, 6) + '-' + dateStr2.substring(6, 8)
 			}
-			this['photo' + index] = res.value.FILE_URL;
+			this['photo' + index] = res.value.FILE_URL
 		},
 		otherCallback(index, res) {
 			if (res.resultCode !== '200') {
@@ -438,32 +438,32 @@ export default {
 					title: res.systemMessage ? res.systemMessage : '操作失败',
 					icon: 'none',
 					mask: true
-				});
-				return;
+				})
+				return
 			}
 
 			uni.showToast({
 				title: '操作成功',
 				icon: 'none'
-			});
-			this['photo' + index] = res.value.FILE_URL;
+			})
+			this['photo' + index] = res.value.FILE_URL
 		},
 		clickchongpai(index) {
-			this.openChooseImage(index);
+			this.openChooseImage(index)
 		},
 		// 日期控件
 		openDate(index) {
-			if (this.haveSign) return;
-			this.lookingDateIndex = index;
-			this.showPspdate = this['pspdate' + index];
-			this.$refs.calendar.open();
+			if (this.haveSign) return
+			this.lookingDateIndex = index
+			this.showPspdate = this['pspdate' + index]
+			this.$refs.calendar.open()
 		},
 		pspDateChange(e) {
-			this['pspdate' + this.lookingDateIndex] = e.fulldate;
+			this['pspdate' + this.lookingDateIndex] = e.fulldate
 		},
 		//点击长期
 		clickChangqi() {
-			this.pspdate2 = '长期';
+			this.pspdate2 = '长期'
 		},
 		//点击查看协议
 		clickProtocol() {
@@ -472,17 +472,17 @@ export default {
 					title: '获取协议失败',
 					icon: 'none',
 					mask: true
-				});
-				return;
+				})
+				return
 			}
 
 			uni.navigateTo({
 				url: `/pages/sign/signpddf/signpddf?pdfUrl=${this.protocolUrl}`
-			});
+			})
 		},
 		//checkbox
 		checkboxChange(e) {
-			this.checkboxVal = e.detail.value.length == 0 ? false : true;
+			this.checkboxVal = e.detail.value.length == 0 ? false : true
 		},
 		//点击下一步
 		async clickNext() {
@@ -492,8 +492,8 @@ export default {
 					title: '信息请填写完整，并勾选同意协议',
 					icon: 'none',
 					mask: true
-				});
-				return;
+				})
+				return
 			}
 
 			//实名认证
@@ -501,85 +501,91 @@ export default {
 				uni.showLoading({
 					title: '请稍候...',
 					mask: true
-				});
-				let res = await this.realNameAjax();
+				})
+				
+				//签承诺书
+				if (!this.newPdfUrl) {
+					await this.signPdfFunc()
+				}
+				
+				let res = await this.realNameAjax()
 				if (res.resultCode !== '200') {
 					uni.showToast({
 						title: res.systemMessage ? res.systemMessage : '操作失败',
 						icon: 'none',
 						mask: true
-					});
-					return;
+					})
+					return
 				}
 				uni.showToast({
 					title: '操作成功',
 					icon: 'none',
 					mask: true
-				});
+				})
 			}
 			//实名认证 end
 
 			setTimeout(() => {
 				uni.navigateTo({
 					url: '/pages/individual/video/video'
-				});
-			}, 500);
+				})
+			}, 500)
 		},
 		//实名过了 渲染
 		realnameRender() {
 			//photo
-			this.photo0 = this.userInfo.userAuthInfo.PSPT_POSITIVE;
-			this.photo1 = this.userInfo.userAuthInfo.PSPT_NEGATIVE;
-			this.photo2 = this.userInfo.userAttr.HOLD_PSPT_PHOTO;
-			this.photo3 = this.userInfo.userAttr.AVATAR;
-			this.photo4 = this.userInfo.userAttr.CREDIT_REPORT_PHOTO;
+			this.photo0 = this.userInfo.userAuthInfo.PSPT_POSITIVE
+			this.photo1 = this.userInfo.userAuthInfo.PSPT_NEGATIVE
+			this.photo2 = this.userInfo.userAttr.HOLD_PSPT_PHOTO
+			this.photo3 = this.userInfo.userAttr.AVATAR
+			this.photo4 = this.userInfo.userAttr.CREDIT_REPORT_PHOTO
 			// form
-			this.pspname = this.userInfo.userAuthInfo.REAL_NAME;
-			this.pspcard = this.userInfo.userAuthInfo.PSPT_NO;
+			this.pspname = this.userInfo.userAuthInfo.REAL_NAME
+			this.pspcard = this.userInfo.userAuthInfo.PSPT_NO
 
-			let dateStr = this.userInfo.userAttr.EFFECTIVE_DATE;
-			this.pspdate1 = dateStr.split('--')[0];
-			this.pspdate2 = dateStr.split('--')[1];
+			let dateStr = this.userInfo.userAttr.EFFECTIVE_DATE
+			this.pspdate1 = dateStr.split('--')[0]
+			this.pspdate2 = dateStr.split('--')[1]
 
-			this.bankcard = this.userInfo.userAttr.BANK_NO;
+			this.bankcard = this.userInfo.userAttr.BANK_NO
 		},
 		//承诺书相关
 		async clickProtocol2() {
-			let srcUrl = '';
+			let srcUrl = ''
 			if (this.haveRealname) {
 				//已实名
-				let url = await this.getPdfNew();
-				if (!url) return;
-				srcUrl = url;
+				let url = await this.getPdfNew()
+				if (!url) return
+				srcUrl = url
 			} else {
 				//未实名
 				if (this.checkboxVal) {
 					//同意
-					let url = await this.getPdfNewWrap();
-					if (!url) return;
-					srcUrl = url;
+					let url = await this.getPdfNewWrap()
+					if (!url) return
+					srcUrl = url
 				} else {
 					//没勾选同意
-					srcUrl = this.oldPdfUrl;
+					srcUrl = this.oldPdfUrl
 				}
 			}
 			uni.navigateTo({
 				url: `/pages/sign/signpddf/signpddf?pdfUrl=${srcUrl}`
-			});
+			})
 		},
 		//获取原版承诺书
 		async getPdfOrigin() {
 			let res = await requestw({
 				url: allApiStr.getPdfOriginApi
-			});
+			})
 			if (res.data.resultCode !== '200') {
 				uni.showToast({
 					title: '承诺书获取失败',
 					icon: 'none'
-				});
-				return;
+				})
+				return
 			}
-			this.oldPdfUrl = res.data.value;
+			this.oldPdfUrl = res.data.value
 		},
 		//承诺书签字
 		signPdfFunc() {
@@ -588,9 +594,9 @@ export default {
 					uni.showToast({
 						title: '请先识别身份证',
 						icon: 'none'
-					});
-					resolve(null);
-					return;
+					})
+					resolve(null)
+					return
 				}
 				let res = await requestw({
 					url: allApiStr.signPdfFuncApi,
@@ -599,17 +605,17 @@ export default {
 						userName: this.pspname,
 						idNo: this.pspcard
 					}
-				});
+				})
 				if (res.data.resultCode != '200') {
 					uni.showToast({
 						title: res.data.systemMessage ? res.data.systemMessage : '获取失败',
 						icon: 'none'
-					});
-					resolve(null);
-					return;
+					})
+					resolve(null)
+					return
 				}
-				resolve(res.data.value);
-			});
+				resolve(res.data.value)
+			})
 		},
 		//获取已签字的新的承诺书
 		getPdfNew() {
@@ -619,44 +625,44 @@ export default {
 					data: {
 						userCode: uni.getStorageSync(userInfoKey).USER_CODE
 					}
-				});
-				console.log(res);
+				})
+				console.log(res)
 				if (res.data.resultCode != '200') {
 					uni.showToast({
 						title: res.data.systemMessage ? res.data.systemMessage : '获取失败',
 						icon: 'none'
-					});
-					resolve(null);
-					return;
+					})
+					resolve(null)
+					return
 				}
-				resolve(res.data.value);
-			});
+				resolve(res.data.value)
+			})
 		},
 		getPdfNewWrap() {
 			return new Promise(async resolve => {
 				if (this.newPdfUrl) {
-					resolve(this.newPdfUrl);
-					return;
+					resolve(this.newPdfUrl)
+					return
 				}
 
 				uni.showLoading({
 					title: '请稍候...',
 					mask: true
-				});
-				let res1 = await this.signPdfFunc();
+				})
+				let res1 = await this.signPdfFunc()
 				// let res2 = await this.getPdfNew();
-				uni.hideLoading();
+				uni.hideLoading()
 				if (!res1) {
-					resolve(null);
-					return;
+					resolve(null)
+					return
 				}
-				this.newPdfUrl = res1;
-				resolve(res1);
-			});
+				this.newPdfUrl = res1
+				resolve(res1)
+			})
 		}
 		//承诺书相关 end
 	} //methods end
-};
+}
 </script>
 
 <style>
