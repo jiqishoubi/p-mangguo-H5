@@ -11,6 +11,10 @@
 					<text v-if="flag" style="color:green;">成功</text>
 					<text v-else style="color:red;">失败</text>
 				</view>
+				<view class="box_title">
+					网络状态：
+					<text>{{ baiduMsg }}</text>
+				</view>
 			</view>
 
 			<!-- 具体 -->
@@ -39,10 +43,10 @@
 </template>
 
 <script>
-import step from '@/components/step.vue';
-import requestw from '@/utils/requestw.js';
-import allApiStr from '@/utils/allApiStr.js';
-import { globalHost } from '@/utils/utils.js';
+import step from '@/components/step.vue'
+import requestw from '@/utils/requestw.js'
+import allApiStr from '@/utils/allApiStr.js'
+import { globalHost } from '@/utils/utils.js'
 
 export default {
 	data() {
@@ -52,13 +56,15 @@ export default {
 
 			data: null,
 			imgSrc: '',
-			tempFilePath: ''
-		};
+			tempFilePath: '',
+
+			baiduMsg: ''
+		}
 	},
 	computed: {
 		//是否成功
 		flag() {
-			return this.data && this.data.score > this.threshold && this.data.code.create == this.data.code.identify;
+			return this.data && this.data.score > this.threshold && this.data.code.create == this.data.code.identify
 		}
 	},
 	components: {
@@ -68,12 +74,18 @@ export default {
 	 * 周期
 	 */
 	onLoad(option) {
-		let mangguoVideoResult = uni.getStorageSync('mangguoVideoResult');
-		let result;
+		let mangguoVideoResult = uni.getStorageSync('mangguoVideoResult')
+		let result
 		try {
-			result = JSON.parse(mangguoVideoResult.result);
+			result = JSON.parse(mangguoVideoResult.result)
 		} catch (e) {
-			return;
+			uni.showModal({
+				title: '提示',
+				content: JSON.stringify(e),
+				showCancel: false,
+				success: () => {}
+			})
+			return
 		}
 
 		if (result.code !== 200) {
@@ -82,15 +94,16 @@ export default {
 				content: result.systemMessage,
 				showCancel: false,
 				success: () => {}
-			});
-			return;
+			})
+			return
 		}
 
-		console.log(result);
-		this.data = result.data;
-		this.imgSrc = 'data:image/jpeg;base64,' + result.data.pic_list[result.data.pic_list.length - 1].pic;
-		this.tempFilePath = mangguoVideoResult.tempFilePath;
-		this.fileName = mangguoVideoResult.fileName;
+		console.log(result)
+		this.data = result.data
+		this.baiduMsg = result.baiduMsg
+		this.imgSrc = 'data:image/jpeg;base64,' + result.data.pic_list[result.data.pic_list.length - 1].pic
+		this.tempFilePath = mangguoVideoResult.tempFilePath
+		this.fileName = mangguoVideoResult.fileName
 	},
 	onShow() {},
 	onReady() {},
@@ -107,31 +120,31 @@ export default {
 		chongpai() {
 			uni.redirectTo({
 				url: '/pages/individual/video/video'
-			});
+			})
 		},
 		//上传视频到我们自己的服务器
 		uploadVideo() {
-			const self = this;
+			const self = this
 			return new Promise(resolve => {
 				let postData = {
 					fileName: self.fileName,
 					fieldType: 'other',
 					ocrType: 'other'
-				};
+				}
 				uni.uploadFile({
 					url: globalHost() + allApiStr.ocrApi,
 					filePath: self.tempFilePath,
 					name: 'file',
 					formData: postData,
 					success: res => {
-						let data = null;
+						let data = null
 						try {
-							data = JSON.parse(res.data);
+							data = JSON.parse(res.data)
 						} catch (e) {}
-						resolve(data);
+						resolve(data)
 					}
-				});
-			});
+				})
+			})
 		},
 		// 保存结果
 		saveLiveResult(fileUrl) {
@@ -140,35 +153,35 @@ export default {
 					score: this.data && this.data.score ? this.data.score : null, //   分数
 					liveCaptcha: this.data && this.data.code && this.data.code.create ? this.data.code.create : null, // 检测数字
 					checkVideoUrl: fileUrl // 视频地址
-				};
+				}
 				let res = await requestw({
 					url: allApiStr.saveLiveResultApi,
 					data: postData
-				});
-				resolve(res);
-			});
+				})
+				resolve(res)
+			})
 		},
 		async nextStep() {
-			uni.showLoading({ title: '请稍候...', mask: true });
-			let res1 = await this.uploadVideo();
+			uni.showLoading({ title: '请稍候...', mask: true })
+			let res1 = await this.uploadVideo()
 			if (!res1 || res1.resultCode !== '200') {
-				uni.showToast({ title: res1.systemMessage ? res1.systemMessage : '上传视频失败', icon: 'none', mask: true });
-				return;
+				uni.showToast({ title: res1.systemMessage ? res1.systemMessage : '上传视频失败', icon: 'none', mask: true })
+				return
 			}
 
-			let res2 = await this.saveLiveResult(res1.value.FILE_URL);
+			let res2 = await this.saveLiveResult(res1.value.FILE_URL)
 			if (res2.data.resultCode !== '200') {
-				uni.showToast({ title: res2.data.systemMessage ? res2.data.systemMessage : '保存活体检测信息失败', icon: 'none', mask: true });
-				return;
+				uni.showToast({ title: res2.data.systemMessage ? res2.data.systemMessage : '保存活体检测信息失败', icon: 'none', mask: true })
+				return
 			}
 
-			uni.hideLoading();
+			uni.hideLoading()
 			uni.navigateTo({
 				url: '/pages/individual/signature/signature'
-			});
+			})
 		}
 	}
-};
+}
 </script>
 
 <style>

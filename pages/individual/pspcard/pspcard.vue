@@ -398,8 +398,9 @@ export default {
 			const self = this
 			uni.chooseImage({
 				count: 1,
-				sizeType: ['compressed'],
+				// sizeType: ['compressed'],
 				success: res => {
+					console.log(res)
 					if (res.errMsg && res.errMsg.indexOf(':ok') > -1 && res.tempFilePaths && res.tempFilePaths[0]) {
 						let tempFilePath = res.tempFilePaths[0]
 						let file = res.tempFiles[0]
@@ -502,12 +503,12 @@ export default {
 					title: '请稍候...',
 					mask: true
 				})
-				
+
 				//签承诺书
 				if (!this.newPdfUrl) {
 					await this.signPdfFunc()
 				}
-				
+
 				let res = await this.realNameAjax()
 				if (res.resultCode !== '200') {
 					uni.showToast({
