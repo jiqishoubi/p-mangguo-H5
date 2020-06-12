@@ -9,14 +9,8 @@
 
 		<!-- form -->
 		<view class="form">
-			<view class="form_item">
-				<image class="form_item_icon" src="https://cdn.s.bld365.com/mangguologin_form_item_icon_03.png"></image>
-				<!-- <picker class="form_input h100 flexCenter" mode="selector" :range="mchCodeListSelect" range-key="text" :value="mchCodeListSelectIndex" @change="mchCodeChange">
-					<text style="color: grey;">选择商户：</text>
-					{{ mchCodeListSelect[mchCodeListSelectIndex].text }}
-				</picker> -->
-				<picker-merchant @onConfirm="pickerMerchantConfirm"></picker-merchant>
-			</view>
+			<picker-merchant @onConfirm="pickerMerchantConfirm"></picker-merchant>
+
 			<view class="form_item">
 				<image class="form_item_icon" src="https://cdn.s.bld365.com/mangguologin_form_item_icon_01.png"></image>
 				<input class="form_input" type="number" placeholder="请输入手机号码" v-model="phoneNumber" maxlength="11" />
@@ -35,13 +29,13 @@
 
 <script>
 // 组件
-import mpCompleteNavbarHeight from '@/components/mp-completeNavbarHeight.vue';
-import getsmsbtn from '@/components/getsmsbtn.vue';
-import pickerMerchant from '@/components/picker-merchant.vue';
-import { globalHost } from '@/utils/utils.js';
-import requestw from '@/utils/requestw.js';
-import allApiStr from '@/utils/allApiStr.js';
-import { userInfoKey, phoneNumberKey, mchCodeKey, companyCodeKey, mchCodeListSelect } from '@/utils/consts.js';
+import mpCompleteNavbarHeight from '@/components/mp-completeNavbarHeight.vue'
+import getsmsbtn from '@/components/getsmsbtn.vue'
+import pickerMerchant from '@/components/picker-merchant/picker-merchant.vue'
+import { globalHost } from '@/utils/utils.js'
+import requestw from '@/utils/requestw.js'
+import allApiStr from '@/utils/allApiStr.js'
+import { userInfoKey, phoneNumberKey, mchCodeKey, companyCodeKey, mchCodeListSelect } from '@/utils/consts.js'
 
 export default {
 	data() {
@@ -56,7 +50,7 @@ export default {
 
 			// getsmsbtn
 			allUrl: globalHost() + allApiStr.getSmsLogin
-		};
+		}
 	},
 	components: {
 		mpCompleteNavbarHeight,
@@ -73,22 +67,23 @@ export default {
 		// 	this.$refs.getsmsbtn.endTimer();
 		// },
 		pickerMerchantConfirm(res) {
-			this.merchantCode = res.key;
+			console.log(res)
+			this.merchantCode = res
 
-			this.phoneNumber = '';
-			this.smsCode = '';
-			this.$refs.getsmsbtn.endTimer();
+			this.phoneNumber = ''
+			this.smsCode = ''
+			this.$refs.getsmsbtn.endTimer()
 		},
 		//登录
 		async login() {
 			//验证
 			if (this.phoneNumber == '' || this.smsCode == '') {
-				uni.showToast({ title: '手机号和验证码请填写完整', icon: 'none', mask: true });
-				return;
+				uni.showToast({ title: '手机号和验证码请填写完整', icon: 'none', mask: true })
+				return
 			}
 			//验证 end
 
-			uni.showLoading({ title: '请稍候...', mask: true });
+			uni.showLoading({ title: '请稍候...', mask: true })
 			let res = await requestw({
 				url: allApiStr.loginApi,
 				data: {
@@ -96,24 +91,24 @@ export default {
 					smsCaptcha: this.smsCode,
 					mchCode: this.merchantCode ? this.merchantCode : null
 				}
-			});
+			})
 			if (res.data.resultCode !== '200') {
-				uni.showToast({ title: res.data.systemMessage ? res.data.systemMessage : '操作失败', icon: 'none', mask: true });
-				return;
+				uni.showToast({ title: res.data.systemMessage ? res.data.systemMessage : '操作失败', icon: 'none', mask: true })
+				return
 			}
 
-			uni.hideLoading();
-			uni.setStorageSync(userInfoKey, res.data.value);
-			uni.setStorageSync(phoneNumberKey, this.phoneNumber);
+			uni.hideLoading()
+			uni.setStorageSync(userInfoKey, res.data.value)
+			uni.setStorageSync(phoneNumberKey, this.phoneNumber)
 			// uni.setStorageSync(mchCodeKey, this.mchCodeListSelect[this.mchCodeListSelectIndex].value);
-			uni.setStorageSync(mchCodeKey, this.merchantCode);
-			uni.setStorageSync(companyCodeKey, res.data.value.employeeMap && res.data.value.employeeMap.COMPANY_CODE ? res.data.value.employeeMap.COMPANY_CODE : null);
+			uni.setStorageSync(mchCodeKey, this.merchantCode)
+			uni.setStorageSync(companyCodeKey, res.data.value.employeeMap && res.data.value.employeeMap.COMPANY_CODE ? res.data.value.employeeMap.COMPANY_CODE : null)
 			uni.reLaunch({
 				url: '/pages/wode/wode_index/wode_index'
-			});
+			})
 		}
 	}
-};
+}
 </script>
 
 <style lang="less">
