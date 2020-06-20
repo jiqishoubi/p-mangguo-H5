@@ -73,6 +73,10 @@ const list = [
 	{text:'宁顺店'	,key:'MCH202005290001'},
 	{text:'丽景店'	,key:'MCH202005290002'},
 	{text:'恒德店'	,key:'MCH202006080005'},
+	//2020.06.17
+	{text:'启园店'	,key:'MCH202006120001'},
+	{text:'合湾店'	,key:'MCH202006120002'},
+	{text:'合桂店'	,key:'MCH202006120003'},
 ]
 
 export default list
