@@ -57,21 +57,21 @@
 </template>
 
 <script>
-import { uniPopup } from '@dcloudio/uni-ui'
-import step from '@/components/step.vue'
-import requestw from '@/utils/requestw.js'
-import allApiStr from '@/utils/allApiStr.js'
+import { uniPopup } from '@dcloudio/uni-ui';
+import step from '@/components/step.vue';
+import requestw from '@/utils/requestw.js';
+import allApiStr from '@/utils/allApiStr.js';
 
 export default {
 	data() {
 		return {
 			count: '',
 			count_session_id: ''
-		}
+		};
 	},
 	computed: {
 		countList() {
-			return this.count ? this.count.split('') : []
+			return this.count ? this.count.split('') : [];
 		}
 	},
 	components: {
@@ -95,60 +95,62 @@ export default {
 	 */
 	methods: {
 		async clickNext() {
-			let res = await this.getVoiceCount()
+			let res = await this.getVoiceCount();
 			if (res.code !== 200) {
 				uni.showToast({
 					title: res.systemMessage,
 					icon: 'none',
 					mask: true
-				})
-				return
+				});
+				return;
 			}
 
-			this.count = res.data.code
-			this.count_session_id = res.data.session_id
-			this.$refs.countModal.open()
+			this.count = res.data.code;
+			this.count_session_id = res.data.session_id;
+			this.$refs.countModal.open();
 		},
 		//获取语音码
 		getVoiceCount() {
 			return new Promise(async resolve => {
-				this.count = ''
-				this.count_session_id = ''
+				this.count = '';
+				this.count_session_id = '';
 				uni.showLoading({
 					title: '请稍候...',
 					mask: true
-				})
+				});
 				let res = await requestw({
 					url: allApiStr.getVoiceCountApi
-				})
-				uni.hideLoading()
-				resolve(res.data)
-			})
+				});
+				uni.hideLoading();
+				resolve(res.data);
+			});
 		},
 		//录制视频
 		luzhi() {
-			const self = this
+			const self = this;
 			uni.chooseVideo({
 				sourceType: ['camera'],
 				compressed: true,
 				maxDuration: 5, //最长5秒
 				camera: 'front', //APP、微信小程序
 				success: res => {
+					console.log(res);
 					if (res && res.errMsg.indexOf(':ok') > -1) {
-						let tempFilePath = res.tempFilePath
-						let fileName = res.name
-						self.uploadVideo(tempFilePath, fileName)
+						let tempFilePath = res.tempFilePath;
+						let fileName = res.name;
+						console.log(tempFilePath);
+						self.uploadVideo(tempFilePath, fileName);
 					}
 				}
-			})
+			});
 		},
 		//上传视频（百度H5活体校验）
 		uploadVideo(tempFilePath, fileName) {
-			const self = this
+			const self = this;
 			uni.showLoading({
 				title: '请稍候...',
 				mask: true
-			})
+			});
 			uni.uploadFile({
 				url: allApiStr.checkVideoApi,
 				filePath: tempFilePath,
@@ -162,26 +164,28 @@ export default {
 					// "Content-type": "multipart/form-data"
 				},
 				success: res => {
-					uni.hideLoading()
+					uni.hideLoading();
 
-					self.$refs.countModal.close()
+					self.$refs.countModal.close();
 
 					//待着结果json跳转
 					let obj = {
 						result: res.data,
 						tempFilePath,
 						fileName
-					}
-					uni.setStorageSync('mangguoVideoResult', obj)
-					uni.navigateTo({
-						url: `/pages/individual/videoresult/videoresult`
-					})
+					};
+					uni.setStorageSync('mangguoVideoResult', obj);
+					setTimeout(() => {
+						uni.navigateTo({
+							url: `/pages/individual/videoresult/videoresult`
+						});
+					}, 50);
 				},
 				fail: err => {
-					console.log(err)
+					console.log(err);
 					uni.showToast({
 						title: '网络超时fail'
-					})
+					});
 				}
 				// complete: (e) => {
 				// 	console.log(e)
@@ -189,10 +193,10 @@ export default {
 				// 		title: 'ios complete'
 				// 	})
 				// }
-			})
+			});
 		}
 	}
-}
+};
 </script>
 
 <style lang="less">

@@ -75,10 +75,13 @@ export default {
 	 */
 	onLoad(option) {
 		let mangguoVideoResult = uni.getStorageSync('mangguoVideoResult')
+		console.log(mangguoVideoResult)
 		let result
 		try {
 			result = JSON.parse(mangguoVideoResult.result)
+			console.log(result)
 		} catch (e) {
+			console.log(e)
 			uni.showModal({
 				title: '提示',
 				content: JSON.stringify(e),
