@@ -79,6 +79,9 @@ const list = [
 	//2020.07.30
 	{text:'康盛店'	,key:'MCH202007300001'},
 	{text:'佳海店'	,key:'MCH202007300002'},
+	//2020.07.31
+	{text:'华江店'	,key:'MCH202007070001'},
+	{text:'隆江店'	,key:'MCH202007070002'},
 ]
 
 export default list
