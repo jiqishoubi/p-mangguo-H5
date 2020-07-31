@@ -50,7 +50,7 @@ const list = [
 	{text:'万晶店',key:'MCH202003110021'},	
 	{text:'万景店',key:'MCH202003110002'},	
 	{text:'万钰店',key:'MCH202003110051'},	
-	{text:'熙胤店',key:'MCH202004070002'},	
+	{text:'金域店',key:'MCH202004070002'},	
 	{text:'小石城店',key:'MCH202003110014'},	
 	{text:'馨丰店',key:'MCH202003100004'},	
 	{text:'鑫恒店',key:'MCH202003110049'},	
@@ -76,6 +76,9 @@ const list = [
 	{text:'启园店'	,key:'MCH202006120001'},
 	{text:'合湾店'	,key:'MCH202006120002'},
 	{text:'合桂店'	,key:'MCH202006120003'},
+	//2020.07.30
+	{text:'康盛店'	,key:'MCH202007300001'},
+	{text:'佳海店'	,key:'MCH202007300002'},
 ]
 
 export default list
