@@ -18,7 +18,6 @@ const list = [
 	{text:'恒星店',key:'MCH202003110043'},	
 	{text:'鸿锦店',key:'MCH202003110003'},	
 	{text:'汇置店',key:'MCH202004070004'},	
-	{text:'南阳湖店',key:'MCH202003240002'},	
 	{text:'锦江店',key:'MCH202003110036'},	
 	{text:'锦林店',key:'MCH202004020002'},	
 	{text:'郡江店',key:'MCH202003200001'},	
@@ -58,7 +57,6 @@ const list = [
 	{text:'学昌店',key:'MCH202005060011'},
 	{text:'学辰店',key:'MCH202005200005'},
 	{text:'学海店',key:'MCH202004260001'},
-	{text:'银河城店',key:'MCH202003200002'},	
 	{text:'应昌店',key:'MCH202003110042'},	
 	{text:'永兴店',key:'MCH202003110044'},	
 	{text:'雨润店',key:'MCH202003110040'},	
@@ -79,7 +77,6 @@ const list = [
 	{text:'佳海店'	,key:'MCH202007300002'},
 	//2020.07.31
 	{text:'华江店'	,key:'MCH202007070001'},
-	{text:'隆江店'	,key:'MCH202007070002'},
 ]
 
 export default list

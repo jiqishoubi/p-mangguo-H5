@@ -57,6 +57,10 @@ const list=[
 	//2020.06.17
 	{text:'鑫佳源店'	,key:'MCH202006120004'},
 	{text:'万惠店'	,key:'MCH202006120005'},
+	//2020.11.18
+	{text:'南阳湖店',key:'MCH202003240002'},	
+	{text:'银河城店',key:'MCH202003200002'},	
+	{text:'隆江店'	,key:'MCH202007070002'},
 ]
 
 export default list
